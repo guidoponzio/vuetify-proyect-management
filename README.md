@@ -1,4 +1,4 @@
-# to-do-personal
+# Proyecto final NT2
 
 ## Project setup
 ```
