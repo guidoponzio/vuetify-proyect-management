@@ -34,7 +34,7 @@ export default {
           plazo: "9 Jun 2021",
           estado: "completado",
           descripcion:
-            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.",
+            "Crear base de datos",
         },
         {
           titulo: "Trabajo de NT2",
@@ -42,7 +42,7 @@ export default {
           plazo: "19 Jun 2021",
           estado: "enProgreso",
           descripcion:
-            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.",
+            "Crear Pagina con 3 CRUD",
         },
         {
           titulo: "Trabajo de AMS",
@@ -50,7 +50,7 @@ export default {
           plazo: "1 Jun 2021",
           estado: "vencido",
           descripcion:
-            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.",
+            "Crear Analisis funcional",
         },
         {
           titulo: "Trabajo de AMS",
@@ -58,7 +58,7 @@ export default {
           plazo: "1 Jun 2021",
           estado: "completado",
           descripcion:
-            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.",
+            "Crear analisis Tecnico",
         },
       ],
     };

@@ -12,7 +12,11 @@
           :key="persona.nombre"
         >
           <v-card flat class="text-center ma-3">
-            <v-responsive class="pt-4"> foto de perfil </v-responsive>
+            <v-responsive class="pt-4"> 
+              <v-avatar size="100" class="grey lighten-2">
+                <img :src="persona.avatar">
+              </v-avatar> 
+            </v-responsive>
             <v-card-text>
               <div class="text-subtitle-1">{{ persona.nombre }}</div>
               <div class="grey--text">{{ persona.rol }}</div>
@@ -35,9 +39,9 @@ export default {
   data() {
     return {
       equipo: [
-        { nombre: "Emiliano Graniero", rol: "Desarrollador Backend" },
-        { nombre: "Guido Ponzio", rol: "Desarrollor Frontend" },
-        { nombre: "Lucas Cantoni", rol: "Analista funcional" },
+        { nombre: "Emiliano Graniero", rol: "Desarrollador Backend", avatar: '/backend.jpg'  },
+        { nombre: "Guido Ponzio", rol: "Desarrollor Frontend", avatar: '/frontend.jpg' },
+        { nombre: "Lucas Cantoni", rol: "Analista funcional", avatar: '/ba.jpg' },
       ],
     };
   },
