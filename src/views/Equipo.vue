@@ -1,6 +1,19 @@
 <template>
   <div class="team">
     <h1 class="subtitle-1 grey--text">Equipo</h1>
+
+     <!-- Boton de nuevo integrante -->
+      <v-card-action>
+        <v-row>
+         <v-col class="mt-6 mb-5 text-center">
+              <v-btn depressed class="grey--text mb-3">
+                <v-icon small left> mdi-message </v-icon>
+                <PopupIntegrante/>
+              </v-btn>
+        </v-col>
+      </v-row>
+      </v-card-action>
+
     <v-container class="my-5">
       <v-row wrap>
         <v-col
@@ -35,7 +48,11 @@
 </template>
 
 <script>
+
+import PopupIntegrante from 'PopupIntegrante.vue';
+
 export default {
+  components: { PopupIntegrante },
   data() {
     return {
       equipo: [
@@ -46,4 +63,5 @@ export default {
     };
   },
 };
+
 </script>
