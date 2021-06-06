@@ -1,8 +1,9 @@
 <template>
-  <div class="home">
+  <div>
     <h1 class="subtitle-1 grey--text">Dashboard</h1>
     <v-container class="my-5">
       <v-row class="mb-3">
+        <!-- Titulo !-->
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn
@@ -19,6 +20,7 @@
           <span>Ordenar por titulo</span>
         </v-tooltip>
 
+        <!-- Persona !-->
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn
@@ -35,6 +37,8 @@
           <span>Ordenar por persona</span>
         </v-tooltip>
 
+
+        <!-- Estado !-->
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn

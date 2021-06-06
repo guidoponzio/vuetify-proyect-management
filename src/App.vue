@@ -1,7 +1,8 @@
 <template>
   <v-app>
     <Navbar />
-    <v-content class="grey lighten-3 mx-4 mb-4">
+    <!-- Margen blanco ML-4 !-->
+    <v-content class="grey lighten-3 ml-4">
       <router-view class="grey lighten-3"></router-view>
     </v-content>
   </v-app>
