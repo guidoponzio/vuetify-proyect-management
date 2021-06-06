@@ -49,10 +49,10 @@
 
 <script>
 
-import PopupIntegrante from 'PopupIntegrante.vue';
+import PopupIntegrante from '@/components/PopupIntegrante';
 
 export default {
-  components: { PopupIntegrante },
+  components: {PopupIntegrante},
   data() {
     return {
       equipo: [
