@@ -5,24 +5,59 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    proyectos: [],
+    proyectos: [
+      /**{
+      id: 1,
+      categoria: "Frontned",
+      lider: "Guido Ponzio",
+      nombre: "Trabajo práctico NT2",
+      descripcion: "Lorem ipsum bla bla bla",
+      plazo: null,
+      estado: "enProgreso"
+    }**/
+    ],
     categorias: [],
     lideres: [],
+    nuevoProyecto: null,
+    nuevaCategoria: null,
+    nuevoLider: null,
+    idBuscado: "",
   },
   mutations: {
-    agregandoProyecto(state, nuevoProyecto) {
-      state.proyectos.push(nuevoProyecto);
+    agregandoProyecto(state) {
+      state.proyectos.push(state.nuevoProyecto);
     },
-    agregandoCategoria(state, nuevaCategoria) {
-      state.categorias.push(nuevaCategoria);
+    editandoProyecto(state) {
+      let idx = state.proyectos.findIndex((p) => p.id == state.idBuscado);
+      state.proyectos[idx] = state.nuevoProyecto;
     },
-    agregandoLider(state, nuevoLider) {
-      state.lideres.push(nuevoLider);
+    eliminandoProyecto(state) {
+      let idx = state.proyectos.findIndex((p) => p.id == state.idBuscado);
+      state.proyectos.splice(idx, 1);
+    },
+    agregandoCategoria(state) {
+      state.categorias = [state.nuevaCategoria, ...state.categorias];
+    },
+    agregandoLider(state) {
+      state.lideres = [state.nuevoLider, ...state.lideres];
+    },
   },
   actions: {
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
-    agregarProyecto(context, nuevoProyecto) {
-      context.commit("agregarProyecto", nuevoProyecto);
+    async agregarProyecto(context) {
+      context.commit("agregandoProyecto");
+    },
+    async editarProyecto(context) {
+      context.commit("editandoProyecto");
+    },
+    async eliminarProyecto(context) {
+      context.commit("eliminandoProyecto");
+    },
+    async agregarCategoria(context) {
+      context.commit("agregandoCategoria");
+    },
+    async agregarLider(context) {
+      context.commit("agregandoLider");
     },
   },
   getters: {
@@ -32,8 +67,11 @@ export default new Vuex.Store({
     categorias(state) {
       return state.categorias;
     },
-    personas(state) {
-      return state.pèrsonas;
+    lideres(state) {
+      return state.lideres;
+    },
+    proyecto(state) {
+      return state.proyectos.find((p) => p.id == state.idBuscado);
     },
   },
 });

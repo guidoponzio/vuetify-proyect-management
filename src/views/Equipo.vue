@@ -1,16 +1,19 @@
 <template>
   <div class="team">
-    
-
     <!-- Boton de nuevo integrante -->
-     <v-container>
-        <v-row>
-          <v-col>
-            <h1 class="mt-6 mb-5 text-center grey--text">Equipo</h1>
-          </v-col>
-            <v-col>
-            <p class="mt-6 mb-5 text-center grey--text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quo deleniti quod impedit incidunt a odio voluptatibus culpa adipisci sint corporis enim rem sit, accusantium excepturi, qui laboriosam, earum laudantium?</p>
-          </v-col>
+    <v-container>
+      <v-row>
+        <v-col>
+          <h1 class="mt-6 mb-5 text-center grey--text">Equipo</h1>
+        </v-col>
+        <v-col>
+          <p class="mt-6 mb-5 text-center grey--text">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quo
+            deleniti quod impedit incidunt a odio voluptatibus culpa adipisci
+            sint corporis enim rem sit, accusantium excepturi, qui laboriosam,
+            earum laudantium?
+          </p>
+        </v-col>
         <v-col class="mt-6 mb-5 text-center">
           <v-btn x-large depressed text>
             <PopupIntegrante accion="nuevo" />
@@ -30,11 +33,11 @@
           :key="i"
         >
           <v-card flat class="text-center ma-3">
-            <v-responsive class="pt-4">
+            <!--<v-responsive class="pt-4">
               <v-avatar size="100" class="grey lighten-2">
                 <img :src="persona.avatar" />
               </v-avatar>
-            </v-responsive>
+            </v-responsive>-->
             <v-card-text>
               <div class="text-subtitle-1">{{ persona.nombre }}</div>
               <div class="grey--text">{{ persona.rol }}</div>
@@ -68,7 +71,7 @@ export default {
   components: { PopupIntegrante },
   data() {
     return {
-      equipo: [
+      /**equipo: [
         {
           nombre: "Emiliano Graniero",
           rol: "Desarrollador Backend",
@@ -84,7 +87,7 @@ export default {
           rol: "Analista funcional",
           avatar: "/ba.jpg",
         },
-      ],
+      ],**/
     };
   },
   methods: {},

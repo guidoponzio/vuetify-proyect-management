@@ -1,18 +1,23 @@
 <template>
   <div>
     <!-- Cabecera !-->
-      <v-container>
-        <v-row>
-          <v-col>
-            <h1 class="mt-6 mb-5 text-center grey--text">Dashboard</h1>
-          </v-col>
-            <v-col>
-            <p class="mt-6 mb-5 text-center grey--text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quo deleniti quod impedit incidunt a odio voluptatibus culpa adipisci sint corporis enim rem sit, accusantium excepturi, qui laboriosam, earum laudantium?</p>
-          </v-col>
+    <v-container>
+      <v-row>
+        <v-col>
+          <h1 class="mt-6 mb-5 text-center grey--text">Dashboard</h1>
+        </v-col>
+        <v-col>
+          <p class="mt-6 mb-5 text-center grey--text">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quo
+            deleniti quod impedit incidunt a odio voluptatibus culpa adipisci
+            sint corporis enim rem sit, accusantium excepturi, qui laboriosam,
+            earum laudantium?
+          </p>
+        </v-col>
       </v-row>
     </v-container>
 
-<!-- Botones de ordenamiento !-->
+    <!-- Botones de ordenamiento !-->
     <v-container class="my-5">
       <v-row wrap class="mb-3">
         <!-- Titulo !-->
@@ -70,11 +75,11 @@
 
       <!-- Datos !-->
 
-      <v-card flat v-for="(proyecto, i) in proyectos" :key="i">
+      <v-card flat v-for="proyecto in proyectos" :key="proyecto.id">
         <v-row wrap :class="`pa-3 proyecto ${proyecto.estado}`">
           <v-col>
             <div class="caption blue--text">Titulo del proyecto</div>
-            <div>{{ proyecto.titulo }}</div>
+            <div>{{ proyecto.nombre }}</div>
           </v-col>
 
           <v-col>
@@ -129,7 +134,7 @@
                   </v-icon>
                   <v-icon v-else color="red lighten-1"
                     >mdi-progress-close
-                  </v-icon >
+                  </v-icon>
                 </v-btn>
               </template>
               <span v-if="proyecto.estado == 'enProgreso'"
@@ -146,11 +151,11 @@
           </v-col>
 
           <v-col>
-            <PopupProyecto accion="editar" idProyecto="i" />
+            <PopupProyecto accion="editar" :idProyecto="proyecto.id" />
           </v-col>
 
           <v-col>
-            <v-btn text depressed class="mb-2 ml-2" color="red" dark>
+            <v-btn @click="eliminar(proyecto.id)" text depressed class="mb-2 ml-2" color="red" dark>
               <v-icon dark> mdi-delete </v-icon>
             </v-btn>
           </v-col>
@@ -162,11 +167,12 @@
 
 <script>
 import PopupProyecto from "@/components/PopupProyecto.vue";
+//import { mapState } from "vuex";
 export default {
   components: { PopupProyecto },
   data() {
     return {
-      proyectos: [
+      /**proyectos: [
         {
           titulo: "Trabajo de BD2",
           categoria: "Backend",
@@ -199,7 +205,7 @@ export default {
           estado: "completado",
           descripcion: "Mens Sana",
         },
-      ],
+      ],**/
     };
   },
   methods: {
@@ -215,6 +221,17 @@ export default {
       } else {
         this.proyectos[i].estado = "enProgreso";
       }
+    },
+    eliminar(id){
+      console.log(id);
+      this.$store.state.idBuscado = id;
+      this.$store.dispatch('eliminarProyecto');
+    }
+  },
+  computed: {
+    //...mapState(['proyectos'])
+    proyectos() {
+      return this.$store.state.proyectos;
     },
   },
 };

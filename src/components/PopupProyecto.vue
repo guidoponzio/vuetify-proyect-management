@@ -20,23 +20,25 @@
           <v-form class="px-3" ref="form">
             <!-- Titulo -->
             <v-text-field
-              v-model="titulo"
+              v-model="nombre"
               label="Título"
               prepend-icon="mdi-folder"
               :rules="[rules.requerido, rules.contador]"
               counter="50"
             ></v-text-field>
-          
-          <!-- Categoria -->
+
+            <!-- Categoria -->
             <v-select
               :items="categorias"
+              v-model="categoria"
               label="Categoria"
               prepend-icon="mdi-shape"
             ></v-select>
 
-          <!-- Lider-->
+            <!-- Lider-->
             <v-select
-              :items="personas"
+              :items="lideres"
+              v-model="lider"
               label="Líder"
               prepend-icon="mdi-account"
             ></v-select>
@@ -69,11 +71,23 @@
             </v-menu>
 
             <v-btn
-              @click="enviar()"
+              v-if="accion === 'nuevo'"
+              @click="crear()"
               depressed
-              :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
+              dark
+              class="success"
             >
-              {{ accion == "nuevo" ? "Nuevo" : "Editar" }} proyecto
+              Nuevo Proyecto
+            </v-btn>
+
+            <v-btn
+              v-else
+              @click="editar()"
+              dark
+              depressed
+              class="orange lighten-1"
+            >
+              Editar proyecto
             </v-btn>
           </v-form>
         </v-card-text>
@@ -83,6 +97,7 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 moment.locale("es");
 
@@ -96,6 +111,17 @@ export default {
       nombre: "",
       descripcion: "",
       plazo: null,
+      categoria: "",
+      lider: "",
+      proyecto: {
+        id: "",
+        categoria: "",
+        lider: "",
+        nombre: "",
+        descripcion: "",
+        plazo: null,
+        estado: "",
+      },
       //Los requisitos son la forma de filtrar inputs utilizando el prop :rules que viene definido en Vuetify
       //Cada requisito es una funcion lambda
       rules: {
@@ -105,16 +131,44 @@ export default {
     };
   },
   methods: {
-    enviar() {
-      if (this.$refs.form.validate()) {
-        console.log(this.nombre, this.descripcion);
-      }
+    crear() {
+      this.proyecto.nombre = this.nombre;
+      this.proyecto.categoria = this.categoria;
+      this.proyecto.lider = this.lider;
+      this.proyecto.descripcion = this.descripcion;
+      this.proyecto.plazo = this.plazo;
+      this.proyecto.estado = "enProgreso";
+      this.proyecto.id = String(uuidv4());
 
+      this.$store.state.nuevoProyecto = this.proyecto;
+      this.$store.dispatch("agregarProyecto");
+
+      // Reinicio el objeto proyecto
+      this.proyecto = {
+        id: "",
+        categoria: "",
+        lider: "",
+        nombre: "",
+        descripcion: "",
+        plazo: null,
+        estado: "",
+      },
       this.dialog = false;
+    },
+    editar() {
+      this.$store.state.idBuscado = this.idProyecto;
+      let proyectoEdit = this.$store.getters.proyecto;
+      if (!proyectoEdit) {
+        proyectoEdit.nombre = this.nombre;
+        proyectoEdit.categoria = this.categoria;
+        proyectoEdit.lider = this.lider;
+        proyectoEdit.descripcion = this.descripcion;
+        proyectoEdit.plazo = this.plazo;
 
-      this.nombre = "";
-      this.descripcion = "";
-      this.plazo = null;
+        this.$store.state.nuevoProyecto = this.proyectoEdit;
+        this.$store.dispatch("editarProyecto");
+      }
+      this.dialog = false;
     },
   },
   computed: {
