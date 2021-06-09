@@ -1,8 +1,20 @@
 <template>
   <div>
-    <h1 class="subtitle-1 grey--text">Dashboard</h1>
+    <!-- Cabecera !-->
+      <v-container>
+        <v-row>
+          <v-col>
+            <h1 class="mt-6 mb-5 text-center grey--text">Dashboard</h1>
+          </v-col>
+            <v-col>
+            <p class="mt-6 mb-5 text-center grey--text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quo deleniti quod impedit incidunt a odio voluptatibus culpa adipisci sint corporis enim rem sit, accusantium excepturi, qui laboriosam, earum laudantium?</p>
+          </v-col>
+      </v-row>
+    </v-container>
+
+<!-- Botones de ordenamiento !-->
     <v-container class="my-5">
-      <v-row class="mb-3">
+      <v-row wrap class="mb-3">
         <!-- Titulo !-->
         <v-tooltip top>
           <template v-slot:activator="{ on }">
@@ -31,12 +43,11 @@
               v-on="on"
             >
               <v-icon left small>mdi-account</v-icon>
-              <span right class="caption text-lowercase">persona</span>
+              <span right class="caption text-lowercase">líder</span>
             </v-btn>
           </template>
-          <span>Ordenar por persona</span>
+          <span>Ordenar por líder</span>
         </v-tooltip>
-
 
         <!-- Estado !-->
         <v-tooltip top>
@@ -45,7 +56,7 @@
               small
               depressed
               class="grey--text"
-              @click="ordenarEstado()"
+              @click="ordenar('estado')"
               v-on="on"
             >
               <v-icon left small>mdi-calendar</v-icon>
@@ -59,29 +70,29 @@
 
       <!-- Datos !-->
 
-      <v-card flat v-for="proyecto in proyectos" :key="proyecto.title">
+      <v-card flat v-for="(proyecto, i) in proyectos" :key="i">
         <v-row wrap :class="`pa-3 proyecto ${proyecto.estado}`">
-          <v-flex xs12 md2>
+          <v-col>
             <div class="caption blue--text">Titulo del proyecto</div>
             <div>{{ proyecto.titulo }}</div>
-          </v-flex>
+          </v-col>
 
-          <v-flex xs12 md2>
+          <v-col>
             <div class="caption blue--text">Categoria</div>
             <div>{{ proyecto.categoria }}</div>
-          </v-flex>
+          </v-col>
 
-          <v-flex xs6 sm4 md2>
-            <div class="caption blue--text">Persona</div>
-            <div>{{ proyecto.persona }}</div>
-          </v-flex>
+          <v-col>
+            <div class="caption blue--text">Líder</div>
+            <div>{{ proyecto.lider }}</div>
+          </v-col>
 
-          <v-flex xs6 sm4 md2>
+          <v-col>
             <div class="caption blue--text">Vence</div>
             <div>{{ proyecto.plazo }}</div>
-          </v-flex>
+          </v-col>
 
-          <v-flex xs2 sm4 md2>
+          <v-col>
             <div>
               <v-chip
                 small
@@ -94,23 +105,72 @@
                 }}
               </v-chip>
             </div>
-          </v-flex>
+          </v-col>
+
+          <v-col>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  icon
+                  depressed
+                  class="grey--text"
+                  @click="cambiarEstado(i)"
+                  v-on="on"
+                >
+                  <v-icon
+                    v-if="proyecto.estado == 'enProgreso'"
+                    color="green lighten-1"
+                    >mdi-check</v-icon
+                  >
+                  <v-icon
+                    v-else-if="proyecto.estado == 'completado'"
+                    color="orange lighten-1"
+                    >mdi-progress-clock
+                  </v-icon>
+                  <v-icon v-else color="red lighten-1"
+                    >mdi-progress-close
+                  </v-icon >
+                </v-btn>
+              </template>
+              <span v-if="proyecto.estado == 'enProgreso'"
+                >Cambiar estado a completado</span
+              >
+              <span v-else-if="proyecto.estado == 'completado'"
+                >Cambiar estado a en proceso</span
+              >
+              <span v-else
+                >Este proyecto vencio. Cambiar estado a completado cuanto
+                antes</span
+              >
+            </v-tooltip>
+          </v-col>
+
+          <v-col>
+            <PopupProyecto accion="editar" idProyecto="i" />
+          </v-col>
+
+          <v-col>
+            <v-btn text depressed class="mb-2 ml-2" color="red" dark>
+              <v-icon dark> mdi-delete </v-icon>
+            </v-btn>
+          </v-col>
         </v-row>
       </v-card>
-      <v-divider></v-divider>
     </v-container>
   </div>
 </template>
 
 <script>
+import PopupProyecto from "@/components/PopupProyecto.vue";
 export default {
+  components: { PopupProyecto },
   data() {
     return {
       proyectos: [
         {
           titulo: "Trabajo de BD2",
           categoria: "Backend",
-          persona: "Emiliano Graniero",
+          lider: "Emiliano Graniero",
           plazo: "9 Jun 2021",
           estado: "completado",
           descripcion: "Mens Sana",
@@ -118,7 +178,7 @@ export default {
         {
           titulo: "Trabajo de NT2",
           categoria: "Frontend",
-          persona: "Guido Ponzio",
+          lider: "Guido Ponzio",
           plazo: "19 Jun 2021",
           estado: "enProgreso",
           descripcion: "Mens Sana",
@@ -126,7 +186,7 @@ export default {
         {
           titulo: "Trabajo de AMS",
           categoria: "Analisis funcional",
-          persona: "Lucas Cantoni",
+          lider: "Lucas Cantoni",
           plazo: "1 Jun 2021",
           estado: "vencido",
           descripcion: "Mens Sana",
@@ -134,7 +194,7 @@ export default {
         {
           titulo: "Trabajo de AMS",
           categoria: "Analisis funcional",
-          persona: "Lucas Cantoni",
+          lider: "Lucas Cantoni",
           plazo: "1 Jun 2021",
           estado: "completado",
           descripcion: "Mens Sana",
@@ -146,8 +206,15 @@ export default {
     ordenar(prop) {
       this.proyectos.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
     },
-    ordenarEstado() {
-      this.proyectos.sort((a, b) => a.estado.localeCompare(b.estado));
+    cambiarEstado(i) {
+      let estadoActual = this.proyectos[i].estado;
+      if (estadoActual == "enProgreso") {
+        this.proyectos[i].estado = "completado";
+      } else if (estadoActual == "completado") {
+        this.proyectos[i].estado = "enProgreso";
+      } else {
+        this.proyectos[i].estado = "enProgreso";
+      }
     },
   },
 };
@@ -168,7 +235,7 @@ export default {
   background: #eba834;
 }
 .v-chip.completado {
-  background:#479c38;
+  background: #479c38;
 }
 .v-chip.vencido {
   background: #f83e70;

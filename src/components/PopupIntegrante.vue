@@ -2,11 +2,17 @@
   <div class="text-center">
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on }">
-        <v-btn depressed class="success" dark v-on="on">Nuevo integrante</v-btn>
+        <v-btn
+          depressed
+          :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
+          dark
+          v-on="on"
+          >{{ accion == "nuevo" ? "Nuevo integrante" : "Editar" }}
+        </v-btn>
       </template>
       <v-card>
-        <v-card-title class="headline blue lighten-2" primary-title>
-          Añadir nuevo integrante
+        <v-card-title class="headline blue lighten-2 white--text" primary-title>
+          {{ accion == "nuevo" ? "Nuevo" : "Editar" }} integrante
         </v-card-title>
         <v-card-text>
           <!-- Formulario de nuevo integrante -->
@@ -28,15 +34,19 @@
               :rules="[rules.requerido]"
             ></v-textarea>
 
-            <!-- Avatar -->
+            <!-- Avatar 
             <v-textarea
               v-model="avatar"
               label="avatar"
               prepend-icon="mdi-pencil"
-            ></v-textarea>
+            ></v-textarea>-->
 
-            <v-btn @click="enviar" depressed class="success mx-0 mt-3"
-              >Agregar integrante</v-btn
+            <v-btn
+              @click="enviar()"
+              depressed
+              dark
+              :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
+              >{{ accion }} integrante</v-btn
             >
           </v-form>
         </v-card-text>
@@ -50,8 +60,10 @@ import moment from "moment";
 moment.locale("es");
 
 export default {
+  props: ["accion", "idIntegrante"],
   data() {
     return {
+      dialog: false,
       nombre: "",
       rol: "",
       //Los requisitos son la forma de filtrar inputs utilizando el prop :rules que viene definido en Vuetify
@@ -65,12 +77,11 @@ export default {
   methods: {
     enviar() {
       if (this.$refs.form.validate()) {
-        console.log(this.titulo, this.descripcion);
+        console.log(this.nombre, this.rol);
       }
-
+      this.dialog = false;
       this.nombre = "";
       this.rol = "";
-
     },
   },
 };

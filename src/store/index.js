@@ -7,34 +7,33 @@ export default new Vuex.Store({
   state: {
     proyectos: [],
     categorias: [],
-    personas: [],
-    proyecto: null,
-    categoria: null,
-    persona: null
+    lideres: [],
   },
   mutations: {
-    agregarProyecto(state) {
-      state.proyectos = [state.proyecto, ...state.proyectos];
+    agregandoProyecto(state, nuevoProyecto) {
+      state.proyectos.push(nuevoProyecto);
     },
-    agregarCategoria(state) {
-      state.categorias = [state.categoria, ...state.categorias];
+    agregandoCategoria(state, nuevaCategoria) {
+      state.categorias.push(nuevaCategoria);
     },
-    agregarPersona(state) {
-      state.personas = [state.persona, ...state.personas];
-    },
-    editarProyecto(state) {
-      state.proyectos = [state.proyecto, ...state.proyectos];
-    },
+    agregandoLider(state, nuevoLider) {
+      state.lideres.push(nuevoLider);
   },
   actions: {
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
-    agregarProyectoAction (context ){
-      context.commit('agregarProyecto');
-    }
+    agregarProyecto(context, nuevoProyecto) {
+      context.commit("agregarProyecto", nuevoProyecto);
+    },
   },
   getters: {
     proyectos(state) {
       return state.proyectos;
+    },
+    categorias(state) {
+      return state.categorias;
+    },
+    personas(state) {
+      return state.pèrsonas;
     },
   },
 });

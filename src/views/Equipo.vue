@@ -1,17 +1,23 @@
 <template>
   <div class="team">
-    <h1 class="subtitle-1 grey--text">Equipo</h1>
+    
 
     <!-- Boton de nuevo integrante -->
-    <v-card-action>
-      <v-row>
+     <v-container>
+        <v-row>
+          <v-col>
+            <h1 class="mt-6 mb-5 text-center grey--text">Equipo</h1>
+          </v-col>
+            <v-col>
+            <p class="mt-6 mb-5 text-center grey--text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quo deleniti quod impedit incidunt a odio voluptatibus culpa adipisci sint corporis enim rem sit, accusantium excepturi, qui laboriosam, earum laudantium?</p>
+          </v-col>
         <v-col class="mt-6 mb-5 text-center">
-          <v-btn depressed class="grey--text mb-3">
-            <PopupIntegrante />
+          <v-btn x-large depressed text>
+            <PopupIntegrante accion="nuevo" />
           </v-btn>
         </v-col>
       </v-row>
-    </v-card-action>
+    </v-container>
 
     <v-container class="my-5">
       <v-row wrap>
@@ -33,13 +39,13 @@
               <div class="text-subtitle-1">{{ persona.nombre }}</div>
               <div class="grey--text">{{ persona.rol }}</div>
             </v-card-text>
-              <v-card-action>
-            <v-btn @click="modificarEquipo()" depressed class="mb-2 mx-2 orange lighten-1">
-              Editar
-            </v-btn>
-            <v-btn depressed dark class="mb-2 ml-2 red lighten-1">
-              Eliminar
-            </v-btn>
+            <v-card-action>
+              <v-btn text depressed class="mb-2 mx-2">
+                <PopupIntegrante accion="editar" />
+              </v-btn>
+              <v-btn text depressed class="mb-2 ml-2" color="red" dark>
+                <v-icon dark> mdi-delete </v-icon>
+              </v-btn>
             </v-card-action>
             <!-- <v-card-action>
               <v-btn depressed class="grey--text mb-3">
@@ -81,8 +87,6 @@ export default {
       ],
     };
   },
-  methods: {
-
-  },
+  methods: {},
 };
 </script>

@@ -2,12 +2,19 @@
   <div class="text-center">
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on }">
-        <v-btn depressed class="success" dark v-on="on">Nuevo proyecto</v-btn>
+        <v-btn
+          depressed
+          :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
+          dark
+          v-on="on"
+        >
+          {{ accion == "nuevo" ? "Nuevo proyecto" : "Editar" }}
+        </v-btn>
       </template>
       <v-card>
-        <v-card-title class="headline blue lighten-2" primary-title
-          >Añadir nuevo proyecto</v-card-title
-        >
+        <v-card-title class="headline blue lighten-2" primary-title>
+          {{ accion == "nuevo" ? "Nuevo" : "Editar" }} proyecto
+        </v-card-title>
         <v-card-text>
           <!-- Formulario de nuevo proyecto -->
           <v-form class="px-3" ref="form">
@@ -19,14 +26,20 @@
               :rules="[rules.requerido, rules.contador]"
               counter="50"
             ></v-text-field>
-
-            <v-text-field
-              v-model="categoria"
+          
+          <!-- Categoria -->
+            <v-select
+              :items="categorias"
               label="Categoria"
-              prepend-icon="mdi-folder"
-              :rules="[rules.requerido, rules.contador]"
-              counter="30"
-            ></v-text-field>
+              prepend-icon="mdi-shape"
+            ></v-select>
+
+          <!-- Lider-->
+            <v-select
+              :items="personas"
+              label="Líder"
+              prepend-icon="mdi-account"
+            ></v-select>
 
             <!-- Descripcion -->
             <v-textarea
@@ -36,7 +49,7 @@
               :rules="[rules.requerido]"
             ></v-textarea>
 
-             <!-- Fecha -->
+            <!-- Fecha -->
             <v-menu max-width="290">
               <template v-slot:activator="{ on }">
                 <v-text-field
@@ -55,9 +68,13 @@
               </v-date-picker>
             </v-menu>
 
-            <v-btn @click="enviar" depressed class="success mx-0 mt-3"
-              >Agregar proyecto</v-btn
+            <v-btn
+              @click="enviar()"
+              depressed
+              :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
             >
+              {{ accion == "nuevo" ? "Nuevo" : "Editar" }} proyecto
+            </v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -70,9 +87,13 @@ import moment from "moment";
 moment.locale("es");
 
 export default {
+  props: ["accion", "idProyecto"],
   data() {
     return {
-      titulo: "",
+      dialog: false,
+      categorias: ["Fronted", "Backend", "Funcional", "Redes", "Devops"],
+      lideres: ["Lucas Cantoni", "Emiliano Graniero", "Guido Ponzio"],
+      nombre: "",
       descripcion: "",
       plazo: null,
       //Los requisitos son la forma de filtrar inputs utilizando el prop :rules que viene definido en Vuetify
@@ -86,10 +107,12 @@ export default {
   methods: {
     enviar() {
       if (this.$refs.form.validate()) {
-        console.log(this.titulo, this.descripcion);
+        console.log(this.nombre, this.descripcion);
       }
 
-      this.titulo = "";
+      this.dialog = false;
+
+      this.nombre = "";
       this.descripcion = "";
       this.plazo = null;
     },
