@@ -7,7 +7,6 @@
         <v-row>
          <v-col class="mt-6 mb-5 text-center">
               <v-btn depressed class="grey--text mb-3">
-                <v-icon small left> mdi-message </v-icon>
                 <PopupIntegrante/>
               </v-btn>
         </v-col>

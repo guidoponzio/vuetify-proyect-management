@@ -20,6 +20,14 @@
               counter="50"
             ></v-text-field>
 
+            <v-text-field
+              v-model="categoria"
+              label="Categoria"
+              prepend-icon="mdi-folder"
+              :rules="[rules.requerido, rules.contador]"
+              counter="30"
+            ></v-text-field>
+
             <!-- Descripcion -->
             <v-textarea
               v-model="descripcion"

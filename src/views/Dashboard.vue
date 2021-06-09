@@ -56,11 +56,19 @@
         </v-tooltip>
       </v-row>
       <v-divider></v-divider>
+
+      <!-- Datos !-->
+
       <v-card flat v-for="proyecto in proyectos" :key="proyecto.title">
         <v-row wrap :class="`pa-3 proyecto ${proyecto.estado}`">
-          <v-flex xs12 md6>
+          <v-flex xs12 md2>
             <div class="caption blue--text">Titulo del proyecto</div>
             <div>{{ proyecto.titulo }}</div>
+          </v-flex>
+
+          <v-flex xs12 md2>
+            <div class="caption blue--text">Categoria</div>
+            <div>{{ proyecto.categoria }}</div>
           </v-flex>
 
           <v-flex xs6 sm4 md2>
@@ -101,6 +109,7 @@ export default {
       proyectos: [
         {
           titulo: "Trabajo de BD2",
+          categoria: "Backend",
           persona: "Emiliano Graniero",
           plazo: "9 Jun 2021",
           estado: "completado",
@@ -108,6 +117,7 @@ export default {
         },
         {
           titulo: "Trabajo de NT2",
+          categoria: "Frontend",
           persona: "Guido Ponzio",
           plazo: "19 Jun 2021",
           estado: "enProgreso",
@@ -115,6 +125,7 @@ export default {
         },
         {
           titulo: "Trabajo de AMS",
+          categoria: "Analisis funcional",
           persona: "Lucas Cantoni",
           plazo: "1 Jun 2021",
           estado: "vencido",
@@ -122,6 +133,7 @@ export default {
         },
         {
           titulo: "Trabajo de AMS",
+          categoria: "Analisis funcional",
           persona: "Lucas Cantoni",
           plazo: "1 Jun 2021",
           estado: "completado",
