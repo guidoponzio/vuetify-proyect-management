@@ -1,4 +1,4 @@
-<template>
+<template class="grey lighten-3 ml-4">
   <v-app>
     <Navbar />
     <!-- Margen blanco ML-4 !-->

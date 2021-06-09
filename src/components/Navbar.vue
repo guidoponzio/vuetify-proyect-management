@@ -85,7 +85,7 @@ export default {
       links: [
         { icon: "mdi-view-dashboard", text: "Inicio", route: "/" },
         { icon: "mdi-folder", text: "Mis proyectos", route: "/proyectos" },
-        { icon: "mdi-folder", text: "Categorias", route: "/categorias" },
+        { icon: "mdi-shape", text: "Categorias", route: "/categorias" },
         { icon: "mdi-account", text: "Equipo", route: "/equipo" }
       ],
     };

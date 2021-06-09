@@ -4,6 +4,7 @@
       <template v-slot:activator="{ on }">
         <v-btn depressed class="success" dark v-on="on">Nueva categoria</v-btn>
       </template>
+     
       <v-card>
         <v-card-title class="headline blue lighten-2" primary-title>
           Añadir nueva categoria
@@ -19,28 +20,10 @@
               :rules="[rules.requerido, rules.contador]"
               counter="30"
             ></v-text-field>
-
-           <!-- Rol 
-            <v-textarea
-              v-model="rol"
-              label="Rol"
-              prepend-icon="mdi-pencil"
-              :rules="[rules.requerido]"
-            ></v-textarea>
-
-             Avatar 
-            <v-textarea
-              v-model="avatar"
-              label="avatar"
-              prepend-icon="mdi-pencil"
-            ></v-textarea>
-
-            <v-btn @click="enviar" depressed class="success mx-0 mt-3"
-              >Agregar integrante</v-btn
-            >-->
           </v-form>
         </v-card-text>
       </v-card>
+      
     </v-dialog>
   </div>
 </template>
