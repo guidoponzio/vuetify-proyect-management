@@ -8,10 +8,8 @@
         </v-col>
         <v-col>
           <p class="mt-6 mb-5 text-center grey--text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quo
-            deleniti quod impedit incidunt a odio voluptatibus culpa adipisci
-            sint corporis enim rem sit, accusantium excepturi, qui laboriosam,
-            earum laudantium?
+            Acá puede ver todos los proyectos, cambiar su estado, editarlos y borrarlos.
+            En la parte superior derecha del panel hay botones para ordenar los proyectos y facilitar su visualización.
           </p>
         </v-col>
       </v-row>
@@ -273,17 +271,17 @@ export default {
 
 <style>
 .proyecto.enProgreso {
-  border-left: 8px solid#f6fa05;
+  border-left: 8px solid #ffa726;
 }
 .proyecto.completado {
-  border-left: 8px solid#3cd1c2;
+  border-left: 8px solid#5da84f;
 }
 .proyecto.vencido {
   border-left: 8px solid tomato;
 }
 
 .v-chip.enProgreso {
-  background: #eba834;
+  background: #ffa726;
 }
 .v-chip.completado {
   background: #479c38;

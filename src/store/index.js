@@ -22,6 +22,7 @@ export default new Vuex.Store({
     nuevaCategoria: null,
     nuevoLider: null,
     idBuscado: "",
+    idBuscadoCategoria: "",
   },
   mutations: {
     agregandoProyecto(state) {
@@ -57,6 +58,12 @@ export default new Vuex.Store({
     async agregarCategoria(context) {
       context.commit("agregandoCategoria");
     },
+    async editarCategoria(context) {
+      context.commit("editandoCategoria");
+    },
+    async eliminarCategoria(context) {
+      context.commit("eliminandoCategoria");
+    },
     async agregarLider(context) {
       context.commit("agregandoLider");
     },
@@ -74,5 +81,8 @@ export default new Vuex.Store({
     proyecto(state) {
       return state.proyectos.find((p) => p.id == state.idBuscado);
     },
+    categoria(state){
+      return state.proyectos.find((p) => p.id == state.idBuscadoCategoria);
+    }
   },
 });
