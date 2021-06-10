@@ -4,6 +4,7 @@
       <template v-slot:activator="{ on }">
         <v-btn
           depressed
+          @click="mostrarID()"
           :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
           dark
           v-on="on"
@@ -158,7 +159,7 @@ export default {
     editar() {
       this.$store.state.idBuscado = this.idProyecto;
       let proyectoEdit = this.$store.getters.proyecto;
-      if (!proyectoEdit) {
+      if (proyectoEdit != null) {
         proyectoEdit.nombre = this.nombre;
         proyectoEdit.categoria = this.categoria;
         proyectoEdit.lider = this.lider;
@@ -167,8 +168,15 @@ export default {
 
         this.$store.state.nuevoProyecto = this.proyectoEdit;
         this.$store.dispatch("editarProyecto");
+        this.dialog = false;
       }
-      this.dialog = false;
+     
+    },
+    mostrarID(){
+      alert("ID que llega al componente: " + this.idProyecto);
+      this.$store.state.idBuscado = this.idProyecto;
+      let proyectoEdit = this.$store.getters.proyecto;
+      alert("ID del proyecto traido del store: " + proyectoEdit.id);
     },
   },
   computed: {

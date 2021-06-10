@@ -98,6 +98,11 @@
           </v-col>
 
           <v-col>
+            <div class="caption blue--text">ID</div>
+            <div>{{ proyecto.id }}</div>
+          </v-col>
+
+          <v-col>
             <div>
               <v-chip
                 small
@@ -159,6 +164,8 @@
               <v-icon dark> mdi-delete </v-icon>
             </v-btn>
           </v-col>
+
+
         </v-row>
       </v-card>
     </v-container>

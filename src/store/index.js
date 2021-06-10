@@ -29,7 +29,8 @@ export default new Vuex.Store({
     },
     editandoProyecto(state) {
       let idx = state.proyectos.findIndex((p) => p.id == state.idBuscado);
-      state.proyectos[idx] = state.nuevoProyecto;
+      //state.proyectos[idx] = state.nuevoProyecto;
+      state.splice(idx, 2, state.nuevoProyecto);
     },
     eliminandoProyecto(state) {
       let idx = state.proyectos.findIndex((p) => p.id == state.idBuscado);
