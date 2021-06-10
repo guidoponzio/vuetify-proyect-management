@@ -160,12 +160,17 @@
           </v-col>
 
           <v-col>
-            <v-btn @click="eliminar(proyecto.id)" text depressed class="mb-2 ml-2" color="red" dark>
+            <v-btn
+              @click="eliminar(proyecto.id)"
+              text
+              depressed
+              class="mb-2 ml-2"
+              color="red"
+              dark
+            >
               <v-icon dark> mdi-delete </v-icon>
             </v-btn>
           </v-col>
-
-
         </v-row>
       </v-card>
     </v-container>
@@ -229,11 +234,17 @@ export default {
         this.proyectos[i].estado = "enProgreso";
       }
     },
-    eliminar(id){
-      console.log(id);
-      this.$store.state.idBuscado = id;
-      this.$store.dispatch('eliminarProyecto');
-    }
+    eliminar(id) {
+      if (confirm("¿Está seguro que desea borrar este proyecto? ID: " + id)) {
+        // Borrar
+          this.$store.state.idBuscado = id;
+          this.$store.dispatch("eliminarProyecto");
+        console.log("El proyecto ha sido borrado.");
+      } else {
+        // No borrar
+        console.log("El proyecto NO ha sido borrado");
+      }
+    },
   },
   computed: {
     //...mapState(['proyectos'])
