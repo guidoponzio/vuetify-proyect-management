@@ -40,6 +40,14 @@ export default new Vuex.Store({
     agregandoCategoria(state) {
       state.categorias = [state.nuevaCategoria, ...state.categorias];
     },
+    editandoCategoria(state){
+      let idx = state.categorias.findIndex((c) => c.id == state.idBuscadoCategoria);
+      state.splice(idx, 2, state.nuevaCategoria);
+    },
+    eliminandoCategoria(state){
+      let idx = state.categorias.findIndex((c) => c.id == state.idBuscadoCategoria);
+      state.categorias.splice(idx, 1);
+    },
     agregandoLider(state) {
       state.lideres = [state.nuevoLider, ...state.lideres];
     },
@@ -82,7 +90,7 @@ export default new Vuex.Store({
       return state.proyectos.find((p) => p.id == state.idBuscado);
     },
     categoria(state){
-      return state.proyectos.find((p) => p.id == state.idBuscadoCategoria);
+      return state.categorias.find((c) => c.id == state.idBuscadoCategoria);
     }
   },
 });

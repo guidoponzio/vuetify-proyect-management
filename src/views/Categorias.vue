@@ -44,7 +44,8 @@
               <PopupCategorias accion="editar" :idCategoria="categoria.id" />
             </v-btn>
             <v-card-action>
-              <v-btn text class="mb-2 ml-2" color="red" dark>
+              <v-btn @click="eliminar(categoria.id)"
+              text class="mb-2 ml-2" color="red" dark>
                 <v-icon dark> mdi-delete </v-icon>
               </v-btn>
             </v-card-action>
@@ -74,5 +75,23 @@ export default {
       ],**/
     };
   },
-};
+  methods: {
+    eliminar(id) {
+      if (confirm("¿Está seguro que desea borrar esta categoria? ID: " + id)) {
+        // Borrar
+        this.$store.state.idBuscadoCategoria = id;
+        this.$store.dispatch("eliminarCategoria");
+        alert(`La categoria ${id} ha sido borrada.`);
+      } else {
+        // No borrar
+        console.log("Borrado cancelado");
+      }
+  },
+  },
+  computed: {
+     categorias(){
+      return this.$store.getters.categorias;
+    },
+  }
+}
 </script>
