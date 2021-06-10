@@ -124,7 +124,7 @@
                   icon
                   depressed
                   class="grey--text"
-                  @click="cambiarEstado(i)"
+                  @click="cambiarEstado(proyecto.id)"
                   v-on="on"
                 >
                   <v-icon
@@ -173,6 +173,14 @@
           </v-col>
         </v-row>
       </v-card>
+
+      <v-row>
+        <v-col>
+          <v-btn @click="mostrarTodosAlert()" mt-5>
+            Mostrar estados alerta
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -224,26 +232,34 @@ export default {
     ordenar(prop) {
       this.proyectos.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
     },
-    cambiarEstado(i) {
-      let estadoActual = this.proyectos[i].estado;
+    cambiarEstado(id) {
+      this.$store.state.idBuscado = id;
+      let estadoActual = this.$store.getters.proyecto.estado;
+      let proyectoActual = this.$store.getters.proyecto;
       if (estadoActual == "enProgreso") {
-        this.proyectos[i].estado = "completado";
+        proyectoActual.estado = "completado";
       } else if (estadoActual == "completado") {
-        this.proyectos[i].estado = "enProgreso";
+        proyectoActual.estado = "enProgreso";
       } else {
-        this.proyectos[i].estado = "enProgreso";
+        proyectoActual.estado = "enProgreso";
       }
     },
     eliminar(id) {
       if (confirm("¿Está seguro que desea borrar este proyecto? ID: " + id)) {
         // Borrar
-          this.$store.state.idBuscado = id;
-          this.$store.dispatch("eliminarProyecto");
-        console.log("El proyecto ha sido borrado.");
+        this.$store.state.idBuscado = id;
+        this.$store.dispatch("eliminarProyecto");
+        alert(`El proyecto ${id} ha sido borrado.`);
       } else {
         // No borrar
-        console.log("El proyecto NO ha sido borrado");
+        console.log("Borrado cancelado");
       }
+    },
+    mostrarTodosAlert() {
+      let proyectos = this.$store.state.proyectos;
+      proyectos.forEach((p) => {
+        alert(`${p.nombre}  ${p.estado}`);
+      });
     },
   },
   computed: {
