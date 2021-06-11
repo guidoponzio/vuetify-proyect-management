@@ -29,8 +29,8 @@
           sm="6"
           md="4"
           lg="3"
-          v-for="(persona, i) in equipo"
-          :key="i"
+          v-for="lider in lideres"
+          :key="lider.id"
         >
           <v-card flat class="text-center ma-3">
             <!--<v-responsive class="pt-4">
@@ -39,14 +39,17 @@
               </v-avatar>
             </v-responsive>-->
             <v-card-text>
-              <div class="text-subtitle-1">{{ persona.nombre }}</div>
-              <div class="grey--text">{{ persona.rol }}</div>
+              <div class="text-subtitle-1">{{ lider.nombre }}</div>
+              <div class="grey--text">{{ lider.rol }}</div>
+              <div class="grey--text"> ID: {{ lider.id }}</div>
             </v-card-text>
+
+
             <v-card-action>
               <v-btn text depressed class="mb-2 mx-2">
-                <PopupIntegrante accion="editar" />
+                <PopupIntegrante accion="editar" :idLider="lider.id"/>
               </v-btn>
-              <v-btn text depressed class="mb-2 ml-2" color="red" dark>
+              <v-btn @click="eliminar(lider.id)" text depressed class="mb-2 ml-2" color="red" dark>
                 <v-icon dark> mdi-delete </v-icon>
               </v-btn>
             </v-card-action>
@@ -90,8 +93,23 @@ export default {
       ],**/
     };
   },
-  methods: {},
+  methods: {
+     eliminar(id) {
+      if (confirm("¿Está seguro que desea borrar este integrante? ID: " + id)) {
+        // Borrar
+        this.$store.state.idBuscadoLider = id;
+        this.$store.dispatch("eliminarLider");
+        alert(`El lider ${id} ha sido borrado.`);
+      } else {
+        // No borrar
+        console.log("Borrado cancelado");
+      }
+    },
+  },
   computed: {
+    lideres(){
+      return this.$store.getters.lideres;
+    }
  },
 };
 </script>

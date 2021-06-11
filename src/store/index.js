@@ -23,6 +23,7 @@ export default new Vuex.Store({
     nuevoLider: null,
     idBuscado: "",
     idBuscadoCategoria: "",
+    idBuscadoLider: ""
   },
   mutations: {
     agregandoProyecto(state) {
@@ -51,6 +52,14 @@ export default new Vuex.Store({
     agregandoLider(state) {
       state.lideres = [state.nuevoLider, ...state.lideres];
     },
+    editandoLider(state) {
+      let idx = state.lideres.findIndex((c) => c.id == state.idBuscadoLider);
+      state.splice(idx, 2, state.nuevoLider);
+    },
+    eliminandoLider(state){
+      let idx = state.lideres.findIndex((c) => c.id == state.idBuscadoLider);
+      state.lideres.splice(idx, 1);
+    }
   },
   actions: {
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
@@ -75,6 +84,12 @@ export default new Vuex.Store({
     async agregarLider(context) {
       context.commit("agregandoLider");
     },
+    async editarLider(context) {
+      context.commit("editandoLider");
+    },
+    async eliminarLider(context) {
+      context.commit("eliminandoLider");
+    },
   },
   getters: {
     proyectos(state) {
@@ -91,6 +106,9 @@ export default new Vuex.Store({
     },
     categoria(state){
       return state.categorias.find((c) => c.id == state.idBuscadoCategoria);
+    },
+    lider(state){
+      return state.lideres.find((l) => l.id == state.idBuscadoLider);
     }
   },
 });

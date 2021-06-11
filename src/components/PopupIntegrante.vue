@@ -41,13 +41,13 @@
               prepend-icon="mdi-pencil"
             ></v-textarea>-->
 
-            <v-btn
-              @click="enviar()"
-              depressed
-              dark
-              :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
-              >{{ accion }} integrante</v-btn
-            >
+            <v-btn v-if="accion == 'nuevo' "  @click="crear" depressed dark class="success"
+              >Nuevo integrante
+            </v-btn>
+
+            <v-btn v-else @click="editar" depressed dark class="orange lighten-1"
+              >Editar integrante
+            </v-btn>
           </v-form>
         </v-card-text>
       </v-card>
@@ -56,16 +56,20 @@
 </template>
 
 <script>
-import moment from "moment";
-moment.locale("es");
+import { v4 as uuidv4 } from "uuid";
 
 export default {
-  props: ["accion", "idIntegrante"],
+  props: ["accion", "idLider"],
   data() {
     return {
       dialog: false,
       nombre: "",
       rol: "",
+      lider:{
+        nombre: "",
+        rol: "",
+        id: ""
+      },
       //Los requisitos son la forma de filtrar inputs utilizando el prop :rules que viene definido en Vuetify
       //Cada requisito es una funcion lambda
       rules: {
@@ -75,14 +79,37 @@ export default {
     };
   },
   methods: {
-    enviar() {
+    crear() {
       if (this.$refs.form.validate()) {
-        console.log(this.nombre, this.rol);
+        this.lider.nombre = this.nombre;
+        this.lider.rol = this.rol;
+        this.lider.id = String(uuidv4());
+
+        this.$store.state.nuevoLider = this.lider;
+        this.$store.dispatch('agregarLider');
       }
       this.dialog = false;
       this.nombre = "";
       this.rol = "";
+      this.lider = {
+        nombre: "",
+        rol: "",
+        id: ""
+      }
     },
+    editar(){
+        this.$store.state.idBuscadoLider = this.idLider;
+      let liderEdit = this.$store.getters.lider;
+      if (liderEdit != null) {
+        liderEdit.nombre = this.nombre;
+        liderEdit.rol = this.rol;
+
+        this.$store.state.nuevoLider = this.liderEdit;
+        this.$store.dispatch("editarLider");
+        
+      }
+      this.dialog = false;
+    }
   },
 };
 </script>
