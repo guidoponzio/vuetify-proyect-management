@@ -2,20 +2,25 @@
   <div>
     <!-- Cabecera !-->
     <v-container>
-      <v-row>
+      <v-row wrap>
         <v-col>
           <h1 class="mt-6 mb-5 text-center grey--text">Dashboard</h1>
         </v-col>
         <v-col>
           <p class="mt-6 mb-5 text-center grey--text">
-            Acá puede ver todos los proyectos, cambiar su estado, editarlos y borrarlos.
-            En la parte superior derecha del panel hay botones para ordenar los proyectos y facilitar su visualización.
+            Acá puede ver todos los proyectos, cambiar su estado, editarlos y
+            borrarlos. En la parte superior derecha del panel hay botones para
+            ordenar los proyectos y facilitar su visualización.
           </p>
+        </v-col>
+        <v-col class="mt-6 mb-5">
+          <PopupProyecto accion="nuevo"></PopupProyecto>
         </v-col>
       </v-row>
     </v-container>
 
     <!-- Botones de ordenamiento !-->
+
     <v-container class="my-5">
       <v-row wrap class="mb-3">
         <!-- Titulo !-->
@@ -68,8 +73,28 @@
           </template>
           <span>Ordenar por estado</span>
         </v-tooltip>
+
+        <!-- Categoria !-->
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              small
+              depressed
+              class="grey--text"
+              @click="ordenar('categoria')"
+              v-on="on"
+            >
+              <v-icon left small>mdi-shape</v-icon>
+              <span right class="caption text-lowercase">categoria</span>
+            </v-btn>
+          </template>
+          <span>Ordenar por categoria</span>
+        </v-tooltip>
+     
       </v-row>
-      <v-divider></v-divider>
+       <v-divider></v-divider>
+      
 
       <!-- Datos !-->
 
@@ -171,14 +196,6 @@
           </v-col>
         </v-row>
       </v-card>
-
-      <v-row>
-        <v-col>
-          <v-btn @click="mostrarTodosAlert()" mt-5>
-            Mostrar estados alerta
-          </v-btn>
-        </v-col>
-      </v-row>
     </v-container>
   </div>
 </template>

@@ -39,7 +39,9 @@
               </v-avatar>
             </v-responsive>-->
             <v-card-text>
-              <div class="text-subtitle-1">{{ lider.nombre }}</div>
+                 <v-card-title>
+              <div class="text-title-1">{{ lider.nombre }}</div>
+            </v-card-title>
               <div class="grey--text">{{ lider.rol }}</div>
               <div class="grey--text"> ID: {{ lider.id }}</div>
             </v-card-text>

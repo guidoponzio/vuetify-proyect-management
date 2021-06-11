@@ -32,7 +32,7 @@ export default new Vuex.Store({
     editandoProyecto(state) {
       let idx = state.proyectos.findIndex((p) => p.id == state.idBuscado);
       //state.proyectos[idx] = state.nuevoProyecto;
-      state.splice(idx, 2, state.nuevoProyecto);
+      state.splice(idx, 1, state.nuevoProyecto);
     },
     eliminandoProyecto(state) {
       let idx = state.proyectos.findIndex((p) => p.id == state.idBuscado);
@@ -43,7 +43,7 @@ export default new Vuex.Store({
     },
     editandoCategoria(state){
       let idx = state.categorias.findIndex((c) => c.id == state.idBuscadoCategoria);
-      state.splice(idx, 2, state.nuevaCategoria);
+      state.splice(idx, 1, state.nuevaCategoria);
     },
     eliminandoCategoria(state){
       let idx = state.categorias.findIndex((c) => c.id == state.idBuscadoCategoria);
@@ -54,7 +54,7 @@ export default new Vuex.Store({
     },
     editandoLider(state) {
       let idx = state.lideres.findIndex((c) => c.id == state.idBuscadoLider);
-      state.splice(idx, 2, state.nuevoLider);
+      state.splice(idx, 1, state.nuevoLider);
     },
     eliminandoLider(state){
       let idx = state.lideres.findIndex((c) => c.id == state.idBuscadoLider);

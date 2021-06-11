@@ -39,6 +39,7 @@
             </v-card-title>
             <v-card-text>
               <div class="grey--text">{{ categoria.descripcion }}</div>
+              <div class="grey--text">ID: {{ categoria.id }}</div>
             </v-card-text>
             <v-btn text depressed class="mb-2 ml-2">
               <PopupCategorias accion="editar" :idCategoria="categoria.id" />
