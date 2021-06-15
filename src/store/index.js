@@ -1,21 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from "axios";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    proyectos: [
-      /**{
-      id: 1,
-      categoria: "Frontned",
-      lider: "Guido Ponzio",
-      nombre: "Trabajo práctico NT2",
-      descripcion: "Lorem ipsum bla bla bla",
-      plazo: null,
-      estado: "enProgreso"
-    }**/
-    ],
+    proyectos: [],
     categorias: [],
     lideres: [],
     nuevoProyecto: null,
@@ -59,9 +50,17 @@ export default new Vuex.Store({
     eliminandoLider(state){
       let idx = state.lideres.findIndex((c) => c.id == state.idBuscadoLider);
       state.lideres.splice(idx, 1);
+    },
+    getProyectos(state, proyectos) {
+      state.proyectos = proyectos;
     }
   },
   actions: {
+    async getProyectos(context) {      
+      await axios.get("http://localhost:5000/api/proyectos").then(response => {
+        context.commit("getProyectos", response.data);
+      })
+    },
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
     async agregarProyecto(context) {
       context.commit("agregandoProyecto");
