@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
+import ProyectoService from "../services/ProyectoService";
 
 Vue.use(Vuex);
 
@@ -56,14 +56,15 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async getProyectos(context) {      
-      await axios.get("http://localhost:5000/api/proyectos").then(response => {
-        context.commit("getProyectos", response.data);
-      })
+    async getProyectos(context) {   
+     const proyectos = await ProyectoService.getProyectos();
+     context.commit("getProyectos", proyectos);
     },
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
-    async agregarProyecto(context) {
-      context.commit("agregandoProyecto");
+    async agregarProyecto(context, nuevoProyecto) {
+      await ProyectoService.insertProyecto(nuevoProyecto);
+      context.commit("agregandoProyecto", nuevoProyecto);
+      this.dispatch('getProyectos');
     },
     async editarProyecto(context) {
       context.commit("editandoProyecto");

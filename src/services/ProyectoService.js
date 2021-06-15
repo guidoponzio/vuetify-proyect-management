@@ -1,26 +1,33 @@
 //handles all request from components
 
-import axios from 'axios';
+import axios from "axios";
 
-const url = 'api/proyectos/';
+const url = "api/proyectos/";
 
 class PostService {
-    // Get proyectos
-    static async getProyectos() {
-        await axios.get(url).then(response => {
-            return response.data;
-          })
-    }
+  // Get proyectos
+  static async getProyectos() {
+    let res = null;
+    try {
+      await axios.get(url).then((response) => {
+        res = response.data;
+      });
+      return res;
 
-    // Create proyectos
-    static insertProyecto(proyecto) {
-        return axios.post(url, {proyecto})
+    } catch (err) {
+      return err;
     }
+  }
 
-    // Delete posts
-    static deleteProyecto(id) {
-        return axios.delete(`${url}${id}`)
-    }
+  // Create proyectos
+  static insertProyecto(proyecto) {
+    return axios.post(url, proyecto);
+  }
+
+  // Delete posts
+  static deleteProyecto(id) {
+    return axios.delete(`${url}${id}`);
+  }
 }
 
 export default PostService;

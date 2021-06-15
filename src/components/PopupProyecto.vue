@@ -142,7 +142,7 @@ export default {
       this.proyecto.id = String(uuidv4());
 
       this.$store.state.nuevoProyecto = this.proyecto;
-      this.$store.dispatch("agregarProyecto");
+      this.$store.dispatch("agregarProyecto", this.$store.state.nuevoProyecto);
 
       // Reinicio el objeto proyecto
       this.proyecto = {
