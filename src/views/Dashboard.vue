@@ -248,7 +248,6 @@ export default {
     // get data
     this.$store.dispatch('getProyectos')
     this.proyectos = this.$store.getters.proyectos;
-    console.log(this.$store.getters.proyectos);
   },
   computed: {
     //...mapState(['proyectos'])

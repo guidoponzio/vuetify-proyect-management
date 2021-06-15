@@ -55,13 +55,14 @@ export default {
     this.proyectos = this.$store.getters.proyectos
   },
   computed: {
-      misProyectos(){ 
-         
+      misProyectos(){ return this.$store.getters.proyectos
+
+        /* 
           return this.proyectos.filter(p => {
               // Simula que estoy logueado como Guido asi que solo veo sus proyectos
               return p.lider == "Guido Ponzio"
           })
-         
+         */
       }
   },
 };
