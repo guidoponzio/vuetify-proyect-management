@@ -8,10 +8,7 @@
         </v-col>
         <v-col>
           <p class="mt-6 mb-5 text-center grey--text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quo
-            deleniti quod impedit incidunt a odio voluptatibus culpa adipisci
-            sint corporis enim rem sit, accusantium excepturi, qui laboriosam,
-            earum laudantium?
+            Acá puede crear nuevas categorias para ordenar de manera personalizada sus proyectos.
           </p>
         </v-col>
         <v-col class="mt-6 mb-5 text-center">
@@ -59,6 +56,7 @@
 
 <script>
 import PopupCategorias from "@/components/PopupCategorias";
+import { mapState } from "vuex";
 
 export default {
   components: { PopupCategorias },
@@ -79,20 +77,15 @@ export default {
   methods: {
     eliminar(id) {
       if (confirm("¿Está seguro que desea borrar esta categoria? ID: " + id)) {
-        // Borrar
-        this.$store.state.idBuscadoCategoria = id;
-        this.$store.dispatch("eliminarCategoria");
+        this.$store.dispatch("eliminarCategoria", id);
         alert(`La categoria ${id} ha sido borrada.`);
       } else {
-        // No borrar
         console.log("Borrado cancelado");
       }
   },
   },
   computed: {
-     categorias(){
-      return this.$store.getters.categorias;
-    },
+    ...mapState(['categorias']),
   }
 }
 </script>

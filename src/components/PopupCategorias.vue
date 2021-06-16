@@ -1,12 +1,12 @@
 <template>
   <div class="text-center">
     <v-dialog v-model="dialog" width="500">
-
       <template v-slot:activator="{ on }">
         <v-btn
-        depressed
-        dark
-        text
+          @click="rellenarForm()"
+          depressed
+          dark
+          text
           :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
           v-on="on"
         >
@@ -30,8 +30,8 @@
               prepend-icon="mdi-folder"
               :rules="[rules.requerido, rules.contador]"
               counter="30"
-              >{{ nombre }}</v-text-field
-            >
+              >{{ nombre }}
+              </v-text-field>
             <v-text-field
               v-model="descripcion"
               label="Descripcion"
@@ -41,20 +41,26 @@
               >{{ nombre }}</v-text-field
             >
             <v-card-action>
-              <v-btn v-if="accion == 'nuevo'"
+              <v-btn
+                v-if="accion == 'nuevo'"
                 @click="crear()"
                 depressed
-                dark  orange lighten-1 mx-0 mt-3
+                dark
+                orange
+                lighten-1
+                mx-0
+                mt-3
                 class="success mx-0 mt-3"
                 >Crear categoria
-                </v-btn>
-                 <v-btn v-else
+              </v-btn>
+              <v-btn
+                v-else
                 @click="editar()"
                 depressed
                 dark
                 class="orange lighten-1 mx-0 mt-3"
                 >Editar categoria
-                </v-btn>
+              </v-btn>
             </v-card-action>
           </v-form>
         </v-card-text>
@@ -73,10 +79,10 @@ export default {
       dialog: false,
       nombre: "",
       descripcion: "",
-      categoria:{
+      categoriaNueva: {
         nombre: "",
         descripcion: "",
-        id: ""
+        id: "",
       },
 
       //Los requisitos son la forma de filtrar inputs utilizando el prop :rules que viene definido en Vuetify
@@ -89,12 +95,13 @@ export default {
   },
   methods: {
     crear() {
-      this.categoria.nombre = this.nombre;
-      this.categoria.descripcion = this.descripcion;
-      this.categoria.id = String(uuidv4());
+      this.categoriaNueva.nombre = this.nombre;
+      this.categoriaNueva.descripcion = this.descripcion;
+      this.categoriaNueva.id = String(uuidv4());
 
-      this.$store.state.nuevaCategoria = this.categoria;
-      this.$store.dispatch("agregarCategoria");
+      let categoriaAdd = { ...this.categoriaNueva };
+
+      this.$store.dispatch("agregarCategoria", categoriaAdd);
 
       //Reinicio el objeto categoria
 
@@ -102,24 +109,40 @@ export default {
         id: "",
         nombre: "",
         descripcion: "",
-      }
+      };
+
+      this.nombre = "";
+      this.descripcion = "";
 
       this.dialog = false;
-
     },
     editar() {
-      this.$store.state.idBuscadoCategoria = this.idCategoria;
-      let categoriaEdit = this.$store.getters.categoria;
+      let categoriaEdit = {
+        ...this.$store.getters.categoriaById(this.idCategoria),
+      };
+
       if (categoriaEdit != null) {
         categoriaEdit.nombre = this.nombre;
         categoriaEdit.descripcion = this.descripcion;
-
-        this.$store.state.nuevaCategoria = this.categoriaEdit;
-        this.$store.dispatch("editarCategoria");
-        
+        this.$store.dispatch("editarCategoria", categoriaEdit);
       }
+
+      this.nombre = "";
+      this.descripcion = "";
       this.dialog = false;
+    },
+    rellenarForm() {
+      if (this.accion == "editar") {
+        let categoriaEdit = {
+          ...this.$store.getters.categoriaById(this.idCategoria),
+        };
+
+        // Llenar los campos de textoc con los datos del objeto traido del store
+
+        this.nombre = categoriaEdit.nombre;
+        this.descripcion = categoriaEdit.descripcion;
+      }
+    },
   },
-},
 };
 </script>
