@@ -46,7 +46,7 @@
       <!-- Boton de nuevo proyecto -->
       <v-row>
         <v-col class="mt-6 mb-5 text-center">
-          <Popup/>
+          <PopupProyecto accion="nuevo"/>
         </v-col>
       </v-row>
 
@@ -73,19 +73,18 @@
 </template>
 
 <script>
-
-
-import Popup from './Popup.vue';
+import PopupProyecto from './PopupProyecto.vue';
 
 export default {
-  components: { Popup },
+  components: { PopupProyecto },
   data() {
-    return {
+    return{
       drawer: false,
       links: [
-        { icon: "mdi-view-dashboard", text: "Inicio", route: "/" },
-        { icon: "mdi-folder", text: "Mis proyectos", route: "/proyectos" },
-        { icon: "mdi-account", text: "Equipo", route: "/equipo" },
+        { icon: "mdi-view-dashboard", text: "Dashboard", route: "/" },
+        //{ icon: "mdi-folder", text: "Mis proyectos", route: "/proyectos" },
+        { icon: "mdi-shape", text: "Categorias", route: "/categorias" },
+        { icon: "mdi-account", text: "Equipo", route: "/equipo" }
       ],
     };
   },

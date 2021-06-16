@@ -1,18 +1,23 @@
 <template>
   <div class="team">
-    <h1 class="subtitle-1 grey--text">Equipo</h1>
-
-     <!-- Boton de nuevo integrante -->
-      <v-card-action>
-        <v-row>
-         <v-col class="mt-6 mb-5 text-center">
-              <v-btn depressed class="grey--text mb-3">
-                <v-icon small left> mdi-message </v-icon>
-                <PopupIntegrante/>
-              </v-btn>
+    <!-- Boton de nuevo integrante -->
+    <v-container>
+      <v-row>
+        <v-col>
+          <h1 class="mt-6 mb-5 text-center grey--text">Equipo</h1>
+        </v-col>
+        <v-col>
+          <p class="mt-6 mb-5 text-center grey--text">
+            Acá puede agregar integrantes a su equipo para poder asignarlos como lideres en los proyectos.
+          </p>
+        </v-col>
+        <v-col class="mt-6 mb-5 text-center">
+          <v-btn x-large depressed text>
+            <PopupIntegrante accion="nuevo" />
+          </v-btn>
         </v-col>
       </v-row>
-      </v-card-action>
+    </v-container>
 
     <v-container class="my-5">
       <v-row wrap>
@@ -21,25 +26,39 @@
           sm="6"
           md="4"
           lg="3"
-          v-for="persona in equipo"
-          :key="persona.nombre"
+          v-for="lider in lideres"
+          :key="lider.id"
         >
           <v-card flat class="text-center ma-3">
-            <v-responsive class="pt-4"> 
+            <!--<v-responsive class="pt-4">
               <v-avatar size="100" class="grey lighten-2">
-                <img :src="persona.avatar">
-              </v-avatar> 
-            </v-responsive>
+                <img :src="persona.avatar" />
+              </v-avatar>
+            </v-responsive>-->
             <v-card-text>
-              <div class="text-subtitle-1">{{ persona.nombre }}</div>
-              <div class="grey--text">{{ persona.rol }}</div>
+                 <v-card-title>
+              <div class="text-title-1">{{ lider.nombre }}</div>
+            </v-card-title>
+              <div class="grey--text">{{ lider.rol }}</div>
+              <div class="grey--text"> ID: {{ lider.id }}</div>
             </v-card-text>
+
+
             <v-card-action>
+              <v-btn text depressed class="mb-2 mx-2">
+                <PopupIntegrante accion="editar" :idLider="lider.id"/>
+              </v-btn>
+              <v-btn @click="eliminar(lider.id)" text depressed class="mb-2 ml-2" color="red" dark>
+                <v-icon dark> mdi-delete </v-icon>
+              </v-btn>
+            </v-card-action>
+            <!-- <v-card-action>
               <v-btn depressed class="grey--text mb-3">
                 <v-icon small left> mdi-message </v-icon>
                 <span>Contactar</span>
               </v-btn>
             </v-card-action>
+            -->
           </v-card>
         </v-col>
       </v-row>
@@ -48,20 +67,46 @@
 </template>
 
 <script>
-
-import PopupIntegrante from '@/components/PopupIntegrante';
+import PopupIntegrante from "@/components/PopupIntegrante";
+import { mapState } from "vuex";
 
 export default {
-  components: {PopupIntegrante},
+  components: { PopupIntegrante },
   data() {
     return {
-      equipo: [
-        { nombre: "Emiliano Graniero", rol: "Desarrollador Backend", avatar: '/backend.jpg'  },
-        { nombre: "Guido Ponzio", rol: "Desarrollor Frontend", avatar: '/frontend.jpg' },
-        { nombre: "Lucas Cantoni", rol: "Analista funcional", avatar: '/ba.jpg' },
-      ],
+      /**equipo: [
+        {
+          nombre: "Emiliano Graniero",
+          rol: "Desarrollador Backend",
+          avatar: "/backend.jpg",
+        },
+        {
+          nombre: "Guido Ponzio",
+          rol: "Desarrollor Frontend",
+          avatar: "/frontend.jpg",
+        },
+        {
+          nombre: "Lucas Cantoni",
+          rol: "Analista funcional",
+          avatar: "/ba.jpg",
+        },
+      ],**/
     };
   },
+  methods: {
+     eliminar(id) {
+      if (confirm("¿Está seguro que desea borrar este integrante? ID: " + id)) {
+        // Borrar
+        this.$store.dispatch("eliminarLider", id);
+        alert(`El lider ${id} ha sido borrado.`);
+      } else {
+        // No borrar
+        console.log("Borrado cancelado");
+      }
+    },
+  },
+  computed: {
+    ...mapState(['lideres'])
+ },
 };
-
 </script>
