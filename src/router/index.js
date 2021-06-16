@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
-import Proyectos from "../views/Proyectos.vue";
+//import Proyectos from "../views/Proyectos.vue";
 import Categorias from "../views/Categorias.vue";
 import Equipo from "../views/Equipo.vue";
 
@@ -13,11 +13,11 @@ const routes = [
     name: "Dashboard",
     component: Dashboard,
   },
-  {
+  /**{
     path: "/proyectos",
     name: "Proyectos",
     component: Proyectos,
-  },
+  },**/
   {
     path: "/categorias",
     name: "Categorias",

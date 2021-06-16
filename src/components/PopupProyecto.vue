@@ -3,8 +3,8 @@
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on }">
         <v-btn
+          @click="rellenarForm()"
           depressed
-          @click="mostrarID()"
           :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
           dark
           v-on="on"
@@ -107,14 +107,16 @@ export default {
   data() {
     return {
       dialog: false,
-      categorias: ["Fronted", "Backend", "Funcional", "Redes", "Devops"],
-      lideres: ["Lucas Cantoni", "Emiliano Graniero", "Guido Ponzio"],
+      //categorias: ["Fronted", "Backend", "Funcional", "Redes", "Devops"],
+     // lideres: ["Lucas Cantoni", "Emiliano Graniero", "Guido Ponzio"],
+      //categorias: this.$store.getters.categorias.map(({ nombre }) => ({ nombre })),
+     // lideres: this.$store.getters.lideres.map(({ nombre }) => ({ nombre })),
       nombre: "",
       descripcion: "",
       plazo: null,
       categoria: "",
       lider: "",
-      proyecto: {
+      proyectoNuevo: {
         id: "",
         categoria: "",
         lider: "",
@@ -133,19 +135,26 @@ export default {
   },
   methods: {
     crear() {
-      this.proyecto.nombre = this.nombre;
-      this.proyecto.categoria = this.categoria;
-      this.proyecto.lider = this.lider;
-      this.proyecto.descripcion = this.descripcion;
-      this.proyecto.plazo = this.plazo;
-      this.proyecto.estado = "enProgreso";
-      this.proyecto.id = String(uuidv4());
 
-      this.$store.state.nuevoProyecto = this.proyecto;
-      this.$store.dispatch("agregarProyecto");
+      this.proyectoNuevo.nombre = this.nombre;
+      this.proyectoNuevo.categoria = this.categoria;
+      this.proyectoNuevo.lider = this.lider;
+      this.proyectoNuevo.descripcion = this.descripcion;
+      this.proyectoNuevo.plazo = this.plazo;
+      this.proyectoNuevo.estado = "enProgreso";
+      this.proyectoNuevo.id = String(uuidv4());
+
+      // Creo un objeto clon de proyectoNuevo usando el spread operator 
+      //para que no apunten siempre a la misma direccion de memoria 
+      //todos los proyectos creados
+
+      let proyectoAdd = {... this.proyectoNuevo}
+
+      //this.$store.state.nuevoProyecto = { ...this.proyectoNuevo };
+      this.$store.dispatch("agregarProyecto", proyectoAdd);
 
       // Reinicio el objeto proyecto
-      this.proyecto = {
+      this.proyectoNuevo = {
         id: "",
         categoria: "",
         lider: "",
@@ -153,12 +162,24 @@ export default {
         descripcion: "",
         plazo: null,
         estado: "",
-      },
-      this.dialog = false;
+      };
+
+      // Reinicio las variables en data
+
+      this.nombre = "";
+      this.descripcion = "";
+      this.lider = "";
+      this.categoria = "";
+      this.plazo = "";
+
+      // Cerrar popup luego de enviar el form
+      (this.dialog = false);
     },
     editar() {
-      this.$store.state.idBuscado = this.idProyecto;
-      let proyectoEdit = this.$store.getters.proyecto;
+      //this.$store.state.idBuscado = this.idProyecto;
+      let proyectoEdit = {...this.$store.getters.proyectoById(this.idProyecto),};
+
+      // Actualizar objeto traido del store
       if (proyectoEdit != null) {
         proyectoEdit.nombre = this.nombre;
         proyectoEdit.categoria = this.categoria;
@@ -166,23 +187,55 @@ export default {
         proyectoEdit.descripcion = this.descripcion;
         proyectoEdit.plazo = this.plazo;
 
-        this.$store.state.nuevoProyecto = this.proyectoEdit;
-        this.$store.dispatch("editarProyecto");
-        this.dialog = false;
+        this.$store.dispatch("editarProyecto", proyectoEdit);
       }
-     
+
+       // Reinicio las variables en data
+
+        this.nombre = "";
+        this.descripcion = "";
+        this.lider = "";
+        this.categoria = "";
+        this.plazo = "";
+
+        // Cerrar popup luego de enviar el form
+         this.dialog = false;
     },
-    mostrarID(){
+    mostrarID() {
       alert("ID que llega al componente: " + this.idProyecto);
-      this.$store.state.idBuscado = this.idProyecto;
-      let proyectoEdit = this.$store.getters.proyecto;
+      let proyectoEdit = {
+        ...this.$store.getters.proyectoById(this.idProyecto),
+      };
       alert("ID del proyecto traido del store: " + proyectoEdit.id);
     },
+    rellenarForm(){
+      if(this.accion == 'editar'){
+
+          let proyectoEdit = {
+        ...this.$store.getters.proyectoById(this.idProyecto),
+      };
+
+           // Llenar los campos de textoc con los datos del objeto traido del store
+
+        this.nombre = proyectoEdit.nombre;
+        this.categoria = proyectoEdit.categoria;
+        this.lider = proyectoEdit.lider;
+        this.descripcion = proyectoEdit.descripcion;
+        this.plazo = proyectoEdit.plazo;
+      }
+    }
   },
   computed: {
     fechaFormateada() {
       return this.plazo ? moment(this.plazo).format("Do MMMM YYYY") : "";
     },
+    categorias(){
+      return this.$store.getters.categoriasNombre;
+    },
+    lideres(){
+      return this.$store.getters.lideresNombre;
+    }
+
   },
 };
 </script>

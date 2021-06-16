@@ -3,6 +3,7 @@
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on }">
         <v-btn
+          @click="rellenarForm()"
           depressed
           :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
           dark
@@ -65,7 +66,7 @@ export default {
       dialog: false,
       nombre: "",
       rol: "",
-      lider:{
+      liderNuevo:{
         nombre: "",
         rol: "",
         id: ""
@@ -81,13 +82,15 @@ export default {
   methods: {
     crear() {
       if (this.$refs.form.validate()) {
-        this.lider.nombre = this.nombre;
-        this.lider.rol = this.rol;
-        this.lider.id = String(uuidv4());
+        this.liderNuevo.nombre = this.nombre;
+        this.liderNuevo.rol = this.rol;
+        this.liderNuevo.id = String(uuidv4());
 
-        this.$store.state.nuevoLider = this.lider;
-        this.$store.dispatch('agregarLider');
+        let liderAdd = {... this.liderNuevo};
+
+        this.$store.dispatch('agregarLider', liderAdd);
       }
+
       this.dialog = false;
       this.nombre = "";
       this.rol = "";
@@ -98,17 +101,30 @@ export default {
       }
     },
     editar(){
-        this.$store.state.idBuscadoLider = this.idLider;
-      let liderEdit = this.$store.getters.lider;
+
+      let liderEdit = this.$store.getters.liderById(this.idLider);
       if (liderEdit != null) {
         liderEdit.nombre = this.nombre;
         liderEdit.rol = this.rol;
-
-        this.$store.state.nuevoLider = this.liderEdit;
-        this.$store.dispatch("editarLider");
+        this.$store.dispatch("editarLider", liderEdit);
         
       }
+
+      this.nombre = "";
+      this.rol = "";
       this.dialog = false;
+    },
+    rellenarForm(){
+      if(this.accion == 'editar'){
+
+          let liderEdit = {
+        ...this.$store.getters.liderById(this.idLider),
+      };
+           // Llenar los campos de textoc con los datos del objeto traido del store
+
+        this.nombre = liderEdit.nombre;
+        this.rol = liderEdit.rol;
+      }
     }
   },
 };

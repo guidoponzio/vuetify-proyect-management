@@ -30,7 +30,7 @@
               small
               depressed
               class="grey--text"
-              @click="ordenar('titulo')"
+              @click="ordenar('nombre')"
               v-on="on"
             >
               <v-icon left small>mdi-folder</v-icon>
@@ -47,7 +47,7 @@
               small
               depressed
               class="grey--text"
-              @click="ordenar('persona')"
+              @click="ordenar('lider')"
               v-on="on"
             >
               <v-icon left small>mdi-account</v-icon>
@@ -202,7 +202,7 @@
 
 <script>
 import PopupProyecto from "@/components/PopupProyecto.vue";
-//import { mapState } from "vuex";
+import { mapState } from "vuex";
 export default {
   components: { PopupProyecto },
   data() {
@@ -248,40 +248,37 @@ export default {
       this.proyectos.sort((a, b) => (a[prop] < b[prop] ? -1 : 1));
     },
     cambiarEstado(id) {
-      this.$store.state.idBuscado = id;
-      let estadoActual = this.$store.getters.proyecto.estado;
-      let proyectoActual = this.$store.getters.proyecto;
+      this.$store.dispatch("cambiarEstado", id);
+      //this.$store.state.idBuscado = id;
+      // let estadoActual = this.$store.getters.proyectoById(id).estado;
+      /**let proyectoActual = this.$store.getters.proyectoById(id);
+      let estadoActual = proyectoActual.estado;
       if (estadoActual == "enProgreso") {
         proyectoActual.estado = "completado";
       } else if (estadoActual == "completado") {
         proyectoActual.estado = "enProgreso";
       } else {
         proyectoActual.estado = "enProgreso";
-      }
+      }**/
     },
     eliminar(id) {
       if (confirm("¿Está seguro que desea borrar este proyecto? ID: " + id)) {
         // Borrar
-        this.$store.state.idBuscado = id;
-        this.$store.dispatch("eliminarProyecto");
+        //this.$store.state.idBuscado = id;
+        this.$store.dispatch("eliminarProyecto", id);
         alert(`El proyecto ${id} ha sido borrado.`);
       } else {
         // No borrar
         console.log("Borrado cancelado");
       }
-    },
-    mostrarTodosAlert() {
-      let proyectos = this.$store.state.proyectos;
-      proyectos.forEach((p) => {
-        alert(`${p.nombre}  ${p.estado}`);
-      });
-    },
+    }
   },
   computed: {
-    //...mapState(['proyectos'])
-    proyectos() {
+   ...mapState(['proyectos']),
+    /**proyectos() {
+      console.log(this.$store.state)
       return this.$store.state.proyectos;
-    },
+    },**/
   },
 };
 </script>

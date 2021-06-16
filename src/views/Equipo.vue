@@ -8,10 +8,7 @@
         </v-col>
         <v-col>
           <p class="mt-6 mb-5 text-center grey--text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero quo
-            deleniti quod impedit incidunt a odio voluptatibus culpa adipisci
-            sint corporis enim rem sit, accusantium excepturi, qui laboriosam,
-            earum laudantium?
+            Acá puede agregar integrantes a su equipo para poder asignarlos como lideres en los proyectos.
           </p>
         </v-col>
         <v-col class="mt-6 mb-5 text-center">
@@ -71,6 +68,7 @@
 
 <script>
 import PopupIntegrante from "@/components/PopupIntegrante";
+import { mapState } from "vuex";
 
 export default {
   components: { PopupIntegrante },
@@ -99,8 +97,7 @@ export default {
      eliminar(id) {
       if (confirm("¿Está seguro que desea borrar este integrante? ID: " + id)) {
         // Borrar
-        this.$store.state.idBuscadoLider = id;
-        this.$store.dispatch("eliminarLider");
+        this.$store.dispatch("eliminarLider", id);
         alert(`El lider ${id} ha sido borrado.`);
       } else {
         // No borrar
@@ -109,9 +106,7 @@ export default {
     },
   },
   computed: {
-    lideres(){
-      return this.$store.getters.lideres;
-    }
+    ...mapState(['lideres'])
  },
 };
 </script>
