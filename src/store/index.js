@@ -125,6 +125,8 @@ export default new Vuex.Store({
     },
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
     async agregarProyecto({ commit }, proyectoNuevo) {
+      await ProyectoService.insertProyecto(proyectoNuevo);
+      this.dispatch("fetchProyectos");
       commit("ADD_PROYECTO", proyectoNuevo);
     },
     async editarProyecto({ commit }, proyectoEdit) {
