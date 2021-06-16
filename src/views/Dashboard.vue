@@ -273,6 +273,9 @@ export default {
       }
     }
   },
+  beforeMount(){
+    this.$store.dispatch("fetchProyectos");
+ },
   computed: {
    ...mapState(['proyectos']),
     /**proyectos() {

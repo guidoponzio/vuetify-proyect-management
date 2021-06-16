@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import ProyectoService from "../services/ProyectoService";
 
 Vue.use(Vuex);
 
@@ -113,8 +114,15 @@ export default new Vuex.Store({
       let idx = state.lideres.findIndex((c) => c.id == state.idBuscadoLider);
       state.lideres.splice(idx, 1);
     },**/
+    FETCH_PROYECTOS(state, proyectos){
+      state.proyectos = [... proyectos];
+    },
   },
   actions: {
+    async fetchProyectos({ commit }) {
+      const proyectos = await ProyectoService.getProyectos();
+      commit("FETCH_PROYECTOS", proyectos);
+    },
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
     async agregarProyecto({ commit }, proyectoNuevo) {
       commit("ADD_PROYECTO", proyectoNuevo);
