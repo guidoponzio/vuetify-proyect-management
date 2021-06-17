@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import ProyectoService from "../services/ProyectoService";
+import AxiosHandler from "../services/AxiosHandler";
 
 Vue.use(Vuex);
 
@@ -120,7 +121,7 @@ export default new Vuex.Store({
   },
   actions: {
     async fetchProyectos({ commit }) {
-      const proyectos = await ProyectoService.getProyectos();
+      const proyectos = await AxiosHandler.get("proyectos");
       commit("FETCH_PROYECTOS", proyectos);
     },
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
@@ -134,9 +135,7 @@ export default new Vuex.Store({
       commit("EDIT_PROYECTO", proyectoEdit);
     },
     async eliminarProyecto({ commit }, id) {
-      /**this.$http.delete("http://localhost:3000/proyectos/" + id).then(() => {
-        commit("DELETE_PROYECTO", id);
-      });**/
+      await ProyectoService.deleteProyecto(id)      
       commit("DELETE_PROYECTO", id);
     },
     async cambiarEstado ({commit}, id){

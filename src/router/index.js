@@ -24,18 +24,8 @@ const routes = [
     component: Categorias,
   },
   {
-    path: "/categorias",
-    name: "Categorias",
-    component: Categorias,
-  },
-  {
-    path: "/categorias",
-    name: "Categorias",
-    component: Categorias,
-  },
-  {
     path: "/equipo",
-    name: "equipo",
+    name: "Equipo",
     component: Equipo,
   },
 ];
