@@ -40,7 +40,7 @@
               <div class="text-title-1">{{ lider.nombre }}</div>
             </v-card-title>
               <div class="grey--text">{{ lider.rol }}</div>
-              <div class="grey--text"> ID: {{ lider.id }}</div>
+              <div class="grey--text"> Email: {{ lider.email }}</div>
             </v-card-text>
 
 

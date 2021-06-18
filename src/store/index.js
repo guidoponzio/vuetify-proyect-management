@@ -19,11 +19,11 @@ export default new Vuex.Store({
   mutations: {
     ADD_PROYECTO(state, proyectoNuevo) {
       state.proyectos = [proyectoNuevo, ...state.proyectos];
+      console.log(state.proyectos);
     },
     EDIT_PROYECTO(state, proyectoEdit) {
       let idx = state.proyectos.findIndex((p) => p.id == proyectoEdit.id);
       if (idx !== -1) {
-        //state.proyectos.splice(idx, 1, proyectoEdit);
         state.proyectos[idx] = proyectoEdit;
         //Hay que usar el spread operator para obligar a la UI a refrescar la info en pantalla
         state.proyectos = [... state.proyectos];
@@ -33,12 +33,6 @@ export default new Vuex.Store({
       console.log("Proyectos: " + state.proyectos);
     },
     DELETE_PROYECTO(state, id) {
-     /** let idx = state.proyectos.findIndex((p) => p.id == id);
-      if (idx >= 0) {
-        state.proyectos.splice(idx, 1);
-      } else {
-        console.log(`El proyecto con ID ${id} no existe`);
-      }**/
       let arrAux = state.proyectos.filter( (p) => p.id != id  ) 
       state.proyectos = [... arrAux];
     },
@@ -85,35 +79,6 @@ export default new Vuex.Store({
       let arrAux = state.lideres.filter( (l) => l.id != id  ) 
       state.lideres = [... arrAux];
     },
-    /**,
-    agregandoCategoria(state) {
-      state.categorias = [state.nuevaCategoria, ...state.categorias];
-    },
-    editandoCategoria(state) {
-      let idx = state.categorias.findIndex(
-        (c) => c.id == state.idBuscadoCategoria
-      );
-      console.log(state);
-      state.splice(idx, 1, state.nuevaCategoria);
-    },
-    eliminandoCategoria(state) {
-      let idx = state.categorias.findIndex(
-        (c) => c.id == state.idBuscadoCategoria
-      );
-      state.categorias.splice(idx, 1);
-    },
-    agregandoLider(state) {
-      state.lideres = [state.nuevoLider, ...state.lideres];
-    },
-    editandoLider(state) {
-      let idx = state.lideres.findIndex((c) => c.id == state.idBuscadoLider);
-      console.log(state);
-      state.splice(idx, 1, state.nuevoLider);
-    },
-    eliminandoLider(state) {
-      let idx = state.lideres.findIndex((c) => c.id == state.idBuscadoLider);
-      state.lideres.splice(idx, 1);
-    },**/
     FETCH_PROYECTOS(state, proyectos){
       state.proyectos = [... proyectos];
     },
@@ -125,8 +90,8 @@ export default new Vuex.Store({
     },
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
     async agregarProyecto({ commit }, proyectoNuevo) {
-      await ProyectoService.insertProyecto(proyectoNuevo);
-      this.dispatch("fetchProyectos");
+      //await ProyectoService.insertProyecto(proyectoNuevo);
+      //this.dispatch("fetchProyectos");
       commit("ADD_PROYECTO", proyectoNuevo);
     },
     async editarProyecto({ commit }, proyectoEdit) {

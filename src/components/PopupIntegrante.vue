@@ -5,8 +5,11 @@
         <v-btn
           @click="rellenarForm()"
           depressed
-          :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
-          dark
+          :class="
+            accion === 'nuevo'
+              ? 'success white--text'
+              : 'orange lighten-1 white--text'
+          "
           v-on="on"
           >{{ accion == "nuevo" ? "Nuevo integrante" : "Editar" }}
         </v-btn>
@@ -17,14 +20,15 @@
         </v-card-title>
         <v-card-text>
           <!-- Formulario de nuevo integrante -->
-          <v-form class="px-3" ref="form">
+          <v-form v-model="valid" lazy-validation class="px-3" ref="form">
             <!-- Nombre -->
             <v-text-field
               v-model="nombre"
               label="Nombre completo"
               prepend-icon="mdi-folder"
-              :rules="[rules.requerido, rules.contador]"
-              counter="30"
+              :rules="nombreRules"
+              required
+              counter="50"
             ></v-text-field>
 
             <!-- Rol -->
@@ -32,8 +36,18 @@
               v-model="rol"
               label="Rol"
               prepend-icon="mdi-pencil"
-              :rules="[rules.requerido]"
+              :rules="rolRules"
+              counter="140"
+              required
             ></v-textarea>
+
+            <v-text-field
+              v-model="email"
+              label="Email"
+              prepend-icon="mdi-folder"
+              :rules="emailRules"
+              required
+            ></v-text-field>
 
             <!-- Avatar 
             <v-textarea
@@ -42,11 +56,21 @@
               prepend-icon="mdi-pencil"
             ></v-textarea>-->
 
-            <v-btn v-if="accion == 'nuevo' "  @click="crear" depressed dark class="success"
+            <v-btn
+              v-if="accion == 'nuevo'"
+              @click="crear"
+              depressed
+              class="success white--text"
+              :disabled="!valid"
               >Nuevo integrante
             </v-btn>
 
-            <v-btn v-else @click="editar" depressed dark class="orange lighten-1"
+            <v-btn
+              v-else
+              @click="editar"
+              depressed
+              class="orange lighten-1 white--text"
+              :disabled="!valid"
               >Editar integrante
             </v-btn>
           </v-form>
@@ -63,20 +87,29 @@ export default {
   props: ["accion", "idLider"],
   data() {
     return {
+      valid: true,
       dialog: false,
       nombre: "",
       rol: "",
-      liderNuevo:{
+      email: "",
+      liderNuevo: {
         nombre: "",
         rol: "",
-        id: ""
+        email: "",
+        id: "",
       },
-      //Los requisitos son la forma de filtrar inputs utilizando el prop :rules que viene definido en Vuetify
-      //Cada requisito es una funcion lambda
-      rules: {
-        requerido: (value) => !!value || "Campo obligatorio",
-        contador: (value) => value.length <= 30 || "Máximo 30 caracteres",
-      },
+      nombreRules: [
+        (v) => !!v || "Nombre es obligatorio",
+        (v) => (v && v.length <= 50) || "Debe ser menor a 50 caracteres",
+      ],
+      rolRules: [
+        (v) => !!v || "Rol es obligatorio",
+        (v) => (v && v.length <= 80) || "Debe ser menor a 140 caracteres",
+      ],
+      emailRules: [
+        (v) => !!v || "E-mail es obligatorio",
+        (v) => /.+@.+\..+/.test(v) || "Ingrese un e-mail valido",
+      ],
     };
   },
   methods: {
@@ -84,48 +117,61 @@ export default {
       if (this.$refs.form.validate()) {
         this.liderNuevo.nombre = this.nombre;
         this.liderNuevo.rol = this.rol;
+        this.liderNuevo.email = this.email;
         this.liderNuevo.id = String(uuidv4());
 
-        let liderAdd = {... this.liderNuevo};
+        let liderAdd = { ...this.liderNuevo };
+        this.$store.dispatch("agregarLider", liderAdd);
 
-        this.$store.dispatch('agregarLider', liderAdd);
-      }
+        this.dialog = false;
+        this.nombre = "";
+        this.rol = "";
+        this.lider = {
+          nombre: "",
+          rol: "",
+          id: "",
+        };
 
-      this.dialog = false;
-      this.nombre = "";
-      this.rol = "";
-      this.lider = {
-        nombre: "",
-        rol: "",
-        id: ""
+        this.reiniciarForm();
+        this.reiniciarValidacion();
+
+        // Cerrar popup luego de enviar el form
+        this.dialog = false;
       }
     },
-    editar(){
-
+    editar() {
       let liderEdit = this.$store.getters.liderById(this.idLider);
       if (liderEdit != null) {
-        liderEdit.nombre = this.nombre;
-        liderEdit.rol = this.rol;
-        this.$store.dispatch("editarLider", liderEdit);
-        
+        if(this.$refs.form.validate()){
+          liderEdit.nombre = this.nombre;
+          liderEdit.rol = this.rol;
+          liderEdit.email = this.email;
+          this.$store.dispatch("editarLider", liderEdit);
+          this.reiniciarForm();
+          this.reiniciarValidacion();
+
+           this.dialog = false;
+        }
       }
-
-      this.nombre = "";
-      this.rol = "";
-      this.dialog = false;
     },
-    rellenarForm(){
-      if(this.accion == 'editar'){
-
-          let liderEdit = {
-        ...this.$store.getters.liderById(this.idLider),
-      };
-           // Llenar los campos de textoc con los datos del objeto traido del store
+    rellenarForm() {
+      if (this.accion == "editar") {
+        let liderEdit = {
+          ...this.$store.getters.liderById(this.idLider),
+        };
+        // Llenar los campos de textoc con los datos del objeto traido del store
 
         this.nombre = liderEdit.nombre;
         this.rol = liderEdit.rol;
+        this.email = liderEdit.email;
       }
-    }
+    },
+    reiniciarForm() {
+      this.$refs.form.reset();
+    },
+    reiniciarValidacion() {
+      this.$refs.form.resetValidation();
+    },
   },
 };
 </script>

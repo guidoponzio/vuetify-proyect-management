@@ -120,10 +120,12 @@
             <div>{{ proyecto.plazo }}</div>
           </v-col>
 
+          <!--
           <v-col>
             <div class="caption blue--text">ID</div>
             <div>{{ proyecto.id }}</div>
-          </v-col>
+          </v-col>!
+          -->
 
           <v-col>
             <div>

@@ -5,8 +5,11 @@
         <v-btn
           @click="rellenarForm()"
           depressed
-          :class="accion === 'nuevo' ? 'success' : 'orange lighten-1'"
-          dark
+          :class="
+            accion === 'nuevo'
+              ? 'success white--text'
+              : 'orange lighten-1 white--text'
+          "
           v-on="on"
         >
           {{ accion == "nuevo" ? "Nuevo proyecto" : "Editar" }}
@@ -18,14 +21,15 @@
         </v-card-title>
         <v-card-text>
           <!-- Formulario de nuevo proyecto -->
-          <v-form class="px-3" ref="form">
+          <v-form v-model="valid" lazy-validation class="px-3" ref="form">
             <!-- Titulo -->
             <v-text-field
               v-model="nombre"
               label="Título"
               prepend-icon="mdi-folder"
-              :rules="[rules.requerido, rules.contador]"
-              counter="50"
+              :rules="nombreRules"
+              required
+              :counter="50"
             ></v-text-field>
 
             <!-- Categoria -->
@@ -34,6 +38,8 @@
               v-model="categoria"
               label="Categoria"
               prepend-icon="mdi-shape"
+              required
+              :rules="[(v) => !!v || 'Categoria es obligatoria']"
             ></v-select>
 
             <!-- Lider-->
@@ -42,6 +48,8 @@
               v-model="lider"
               label="Líder"
               prepend-icon="mdi-account"
+              required
+              :rules="[(v) => !!v || 'Lider es obligatorio']"
             ></v-select>
 
             <!-- Descripcion -->
@@ -49,7 +57,9 @@
               v-model="descripcion"
               label="Descripción"
               prepend-icon="mdi-pencil"
-              :rules="[rules.requerido]"
+              required
+              :rules="descripcionRules"
+              :counter="280"
             ></v-textarea>
 
             <!-- Fecha -->
@@ -60,7 +70,8 @@
                   label="Fecha de vencimiento"
                   prepend-icon="mdi-calendar-range"
                   v-on="on"
-                  :rules="[rules.requerido]"
+                  required
+                  :rules="[(v) => !!v || 'Fecha es obligatoria']"
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -73,10 +84,10 @@
 
             <v-btn
               v-if="accion === 'nuevo'"
+              :disabled="!valid"
               @click="crear()"
               depressed
-              dark
-              class="success"
+              class="success white--text"
             >
               Nuevo Proyecto
             </v-btn>
@@ -84,9 +95,9 @@
             <v-btn
               v-else
               @click="editar()"
-              dark
+              :disabled="!valid"
               depressed
-              class="orange lighten-1"
+              class="orange lighten-1 white--text"
             >
               Editar proyecto
             </v-btn>
@@ -107,10 +118,6 @@ export default {
   data() {
     return {
       dialog: false,
-      //categorias: ["Fronted", "Backend", "Funcional", "Redes", "Devops"],
-     // lideres: ["Lucas Cantoni", "Emiliano Graniero", "Guido Ponzio"],
-      //categorias: this.$store.getters.categorias.map(({ nombre }) => ({ nombre })),
-     // lideres: this.$store.getters.lideres.map(({ nombre }) => ({ nombre })),
       nombre: "",
       descripcion: "",
       plazo: null,
@@ -127,79 +134,84 @@ export default {
       },
       //Los requisitos son la forma de filtrar inputs utilizando el prop :rules que viene definido en Vuetify
       //Cada requisito es una funcion lambda
-      rules: {
-        requerido: (value) => !!value || "Campo obligatorio",
-        contador: (value) => value.length <= 50 || "Máximo 50 caracteres",
-      },
+      nombreRules: [
+        (v) => !!v || "Nombre es requerido",
+        (v) =>
+          (v && v.length <= 50) ||
+          "Nombre tiene que tener menos de 50 caracteres",
+      ],
+      descripcionRules: [
+        (v) => !!v || "Descripcion es requerida",
+        (v) =>
+          (v && v.length <= 280) ||
+          "La descripción tiene que tener menos de 280 caracteres",
+      ],
+      valid: true,
     };
   },
   methods: {
     crear() {
+      if (this.$refs.form.validate()) {
+        this.proyectoNuevo.nombre = this.nombre;
+        this.proyectoNuevo.categoria = this.categoria;
+        this.proyectoNuevo.lider = this.lider;
+        this.proyectoNuevo.descripcion = this.descripcion;
+        this.proyectoNuevo.plazo = this.plazo;
+        this.proyectoNuevo.estado = "enProgreso";
+        this.proyectoNuevo.id = String(uuidv4());
 
-      this.proyectoNuevo.nombre = this.nombre;
-      this.proyectoNuevo.categoria = this.categoria;
-      this.proyectoNuevo.lider = this.lider;
-      this.proyectoNuevo.descripcion = this.descripcion;
-      this.proyectoNuevo.plazo = this.plazo;
-      this.proyectoNuevo.estado = "enProgreso";
-      this.proyectoNuevo.id = String(uuidv4());
+        // Creo un objeto clon de proyectoNuevo usando el spread operator
+        //para que no apunten siempre a la misma direccion de memoria
+        //todos los proyectos creados
 
-      // Creo un objeto clon de proyectoNuevo usando el spread operator 
-      //para que no apunten siempre a la misma direccion de memoria 
-      //todos los proyectos creados
+        let proyectoAdd = { ...this.proyectoNuevo };
 
-      let proyectoAdd = {... this.proyectoNuevo}
+        this.$store.dispatch("agregarProyecto", proyectoAdd);
 
-      //this.$store.state.nuevoProyecto = { ...this.proyectoNuevo };
-      this.$store.dispatch("agregarProyecto", proyectoAdd);
+        // Reinicio el objeto proyecto
+        this.proyectoNuevo = {
+          id: "",
+          categoria: "",
+          lider: "",
+          nombre: "",
+          descripcion: "",
+          plazo: null,
+          estado: "",
+        };
 
-      // Reinicio el objeto proyecto
-      this.proyectoNuevo = {
-        id: "",
-        categoria: "",
-        lider: "",
-        nombre: "",
-        descripcion: "",
-        plazo: null,
-        estado: "",
-      };
+        this.reiniciarForm();
+        this.reiniciarValidacion();
 
-      // Reinicio las variables en data
-
-      this.nombre = "";
-      this.descripcion = "";
-      this.lider = "";
-      this.categoria = "";
-      this.plazo = "";
-
-      // Cerrar popup luego de enviar el form
-      (this.dialog = false);
+        // Cerrar popup luego de enviar el form
+        this.dialog = false;
+      }
     },
     editar() {
-      //this.$store.state.idBuscado = this.idProyecto;
-      let proyectoEdit = {...this.$store.getters.proyectoById(this.idProyecto),};
+
+
+      let proyectoEdit = {
+        ...this.$store.getters.proyectoById(this.idProyecto),
+      };
 
       // Actualizar objeto traido del store
       if (proyectoEdit != null) {
-        proyectoEdit.nombre = this.nombre;
-        proyectoEdit.categoria = this.categoria;
-        proyectoEdit.lider = this.lider;
-        proyectoEdit.descripcion = this.descripcion;
-        proyectoEdit.plazo = this.plazo;
+        if (this.$refs.form.validate()) {
+          proyectoEdit.nombre = this.nombre;
+          proyectoEdit.categoria = this.categoria;
+          proyectoEdit.lider = this.lider;
+          proyectoEdit.descripcion = this.descripcion;
+          proyectoEdit.plazo = this.plazo;
 
-        this.$store.dispatch("editarProyecto", proyectoEdit);
+          this.$store.dispatch("editarProyecto", proyectoEdit);
+
+          this.reiniciarForm();
+          this.reiniciarValidacion();
+
+          // Cerrar popup luego de enviar el form
+          this.dialog = false;
+        }
       }
 
-       // Reinicio las variables en data
-
-        this.nombre = "";
-        this.descripcion = "";
-        this.lider = "";
-        this.categoria = "";
-        this.plazo = "";
-
-        // Cerrar popup luego de enviar el form
-         this.dialog = false;
     },
     mostrarID() {
       alert("ID que llega al componente: " + this.idProyecto);
@@ -208,14 +220,13 @@ export default {
       };
       alert("ID del proyecto traido del store: " + proyectoEdit.id);
     },
-    rellenarForm(){
-      if(this.accion == 'editar'){
+    rellenarForm() {
+      if (this.accion == "editar") {
+        let proyectoEdit = {
+          ...this.$store.getters.proyectoById(this.idProyecto),
+        };
 
-          let proyectoEdit = {
-        ...this.$store.getters.proyectoById(this.idProyecto),
-      };
-
-           // Llenar los campos de textoc con los datos del objeto traido del store
+        // Llenar los campos de textoc con los datos del objeto traido del store
 
         this.nombre = proyectoEdit.nombre;
         this.categoria = proyectoEdit.categoria;
@@ -223,19 +234,24 @@ export default {
         this.descripcion = proyectoEdit.descripcion;
         this.plazo = proyectoEdit.plazo;
       }
-    }
+    },
+    reiniciarForm() {
+      this.$refs.form.reset();
+    },
+    reiniciarValidacion() {
+      this.$refs.form.resetValidation();
+    },
   },
   computed: {
     fechaFormateada() {
       return this.plazo ? moment(this.plazo).format("Do MMMM YYYY") : "";
     },
-    categorias(){
+    categorias() {
       return this.$store.getters.categoriasNombre;
     },
-    lideres(){
+    lideres() {
       return this.$store.getters.lideresNombre;
-    }
-
+    },
   },
 };
 </script>
