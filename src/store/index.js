@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import ProyectoService from "../services/ProyectoService";
+import AxiosService from "../services/AxiosService";
 
 Vue.use(Vuex);
 
@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     proyectos: [],
     categorias: [],
-    lideres: [],
+    integrantes: [],
     //nuevoProyecto: null,
     //nuevaCategoria: null,
     //nuevoLider: null,
@@ -63,8 +63,8 @@ export default new Vuex.Store({
       let arrAux = state.categorias.filter( (c) => c.id != id  ) 
       state.categorias = [... arrAux];
     },
-    ADD_LIDER(state, liderNuevo){
-      state.lideres = [liderNuevo, ...state.lideres]
+    ADD_INTEGRANTE(state, integranteNuevo){
+      state.integrantes = [integranteNuevo, ...state.integrantes]
     },
     EDIT_LIDER(state, liderEdit){
       let idx = state.lideres.findIndex((c) => c.id == liderEdit.id);
@@ -82,48 +82,69 @@ export default new Vuex.Store({
     FETCH_PROYECTOS(state, proyectos){
       state.proyectos = [... proyectos];
     },
+    FETCH_CATEGORIAS(state, categorias) {
+      state.categorias = [... categorias];
+    },
+    FETCH_INTEGRANTES(state, integrantes) {
+      state.integrantes = [... integrantes];
+    }
   },
   actions: {
     async fetchProyectos({ commit }) {
-      const proyectos = await ProyectoService.getProyectos();
+      const proyectos = await AxiosService.get('proyectos');
       commit("FETCH_PROYECTOS", proyectos);
+    },
+    async fetchCategorias({ commit }) {
+      const categorias = await AxiosService.get('categorias');
+      commit("FETCH_CATEGORIAS", categorias)
+    },
+    async fetchIntegrantes({ commit }) {
+      const integrantes = await AxiosService.get('integrantes');
+      commit("FETCH_INTEGRANTES", integrantes)
     },
     //Las acciones llaman a las mutaciones. A su vez las acciones pueden hacer llamadas a API's
     async agregarProyecto({ commit }, proyectoNuevo) {
-      //await ProyectoService.insertProyecto(proyectoNuevo);
-      //this.dispatch("fetchProyectos");
+      await AxiosService.insert('proyectos', proyectoNuevo);
+      this.dispatch("fetchProyectos");
       commit("ADD_PROYECTO", proyectoNuevo);
     },
     async editarProyecto({ commit }, proyectoEdit) {
-      console.log("Proyecto en action: ", proyectoEdit);
+      //console.log("Proyecto en action: ", proyectoEdit);
+      await AxiosService.editar('proyectos', proyectoEdit);
       commit("EDIT_PROYECTO", proyectoEdit);
     },
     async eliminarProyecto({ commit }, id) {
-      /**this.$http.delete("http://localhost:3000/proyectos/" + id).then(() => {
-        commit("DELETE_PROYECTO", id);
-      });**/
+      await AxiosService.delete('proyectos', id);
       commit("DELETE_PROYECTO", id);
     },
     async cambiarEstado ({commit}, id){
       commit("CAMBIAR_ESTADO_PROYECTO", id);
     },
     async agregarCategoria({ commit }, categoriaNueva) {
+      await AxiosService.insert('categorias', categoriaNueva);
+      this.dispatch("fetchCategorias");
       commit("ADD_CATEGORIA", categoriaNueva);
     },
     async editarCategoria({ commit }, categoriaEdit) {
+      await AxiosService.update('categorias', categoriaEdit)
       commit("EDIT_CATEGORIA", categoriaEdit);
     },
     async eliminarCategoria({ commit }, id) {
-     commit("DELETE_CATEGORIA", id);
+      await AxiosService.delete('categorias', id);
+      commit("DELETE_CATEGORIA", id);
     },
-    async agregarLider({commit}, liderNuevo) {
-      commit("ADD_LIDER",liderNuevo);
+    async agregarIntegrante({commit}, integranteNuevo) {
+      await AxiosService.insert('integrantes', integranteNuevo);
+      this.dispatch("fetchIntegrantes");
+      commit("ADD_INTEGRANTE",integranteNuevo);
     },
-    async editarLider({commit}, liderEdit) {
-      commit("EDIT_LIDER", liderEdit);
+    async editarIntegrante({commit}, integrante) {
+      await AxiosService.editar('integrantes', integrante)
+      commit("EDIT_INTEGRANTE", integrante);
     },
-    async eliminarLider({commit}, id) {
-      commit("DELETE_LIDER", id);
+    async eliminarIntegrante({commit}, id) {
+      await AxiosService.delete('integrantes', id);
+      commit("DELETE_INTEGRANTE", id);
     },
   },
   getters: {
@@ -140,9 +161,9 @@ export default new Vuex.Store({
         let catNombres = state.categorias.map( (categoria) => categoria.nombre )
         return catNombres;
     },
-    lideres: (state) => {
-      let lideres = [... state.lideres];
-      return lideres;
+    integrantes: (state) => {
+      let integrantes = [... state.integrantes];
+      return integrantes;
     },
     lideresNombre: (state) => {
       let lidNombres = state.lideres.map( (lideres) => lideres.nombre )

@@ -83,6 +83,9 @@ export default {
       }
   },
   },
+  beforeMount(){
+    this.$store.dispatch("fetchCategorias");
+  },
   computed: {
     ...mapState(['categorias']),
   }

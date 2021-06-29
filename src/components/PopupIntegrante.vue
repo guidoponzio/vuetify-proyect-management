@@ -84,7 +84,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 export default {
-  props: ["accion", "idLider"],
+  props: ["accion", "idIntegrante"],
   data() {
     return {
       valid: true,
@@ -92,7 +92,7 @@ export default {
       nombre: "",
       rol: "",
       email: "",
-      liderNuevo: {
+      integranteNuevo: {
         nombre: "",
         rol: "",
         email: "",
@@ -115,18 +115,18 @@ export default {
   methods: {
     crear() {
       if (this.$refs.form.validate()) {
-        this.liderNuevo.nombre = this.nombre;
-        this.liderNuevo.rol = this.rol;
-        this.liderNuevo.email = this.email;
-        this.liderNuevo.id = String(uuidv4());
+        this.integranteNuevo.nombre = this.nombre;
+        this.integranteNuevo.rol = this.rol;
+        this.integranteNuevo.email = this.email;
+        this.integranteNuevo.id = String(uuidv4());
 
-        let liderAdd = { ...this.liderNuevo };
-        this.$store.dispatch("agregarLider", liderAdd);
+        let integranteAdd = { ...this.integranteNuevo };
+        this.$store.dispatch("agregarIntegrante", integranteAdd);
 
         this.dialog = false;
         this.nombre = "";
         this.rol = "";
-        this.lider = {
+        this.integrante = {
           nombre: "",
           rol: "",
           id: "",
@@ -140,13 +140,13 @@ export default {
       }
     },
     editar() {
-      let liderEdit = this.$store.getters.liderById(this.idLider);
-      if (liderEdit != null) {
+      let integranteEdit = this.$store.getters.integranteById(this.idintegrante);
+      if (integranteEdit != null) {
         if(this.$refs.form.validate()){
-          liderEdit.nombre = this.nombre;
-          liderEdit.rol = this.rol;
-          liderEdit.email = this.email;
-          this.$store.dispatch("editarLider", liderEdit);
+          integranteEdit.nombre = this.nombre;
+          integranteEdit.rol = this.rol;
+          integranteEdit.email = this.email;
+          this.$store.dispatch("editarIntegrante", integranteEdit);
           this.reiniciarForm();
           this.reiniciarValidacion();
 
@@ -156,14 +156,14 @@ export default {
     },
     rellenarForm() {
       if (this.accion == "editar") {
-        let liderEdit = {
-          ...this.$store.getters.liderById(this.idLider),
+        let integranteEdit = {
+          ...this.$store.getters.integranteById(this.idIntegrante),
         };
         // Llenar los campos de textoc con los datos del objeto traido del store
 
-        this.nombre = liderEdit.nombre;
-        this.rol = liderEdit.rol;
-        this.email = liderEdit.email;
+        this.nombre = integranteEdit.nombre;
+        this.rol = integranteEdit.rol;
+        this.email = integranteEdit.email;
       }
     },
     reiniciarForm() {

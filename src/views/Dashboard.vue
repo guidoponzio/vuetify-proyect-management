@@ -208,42 +208,7 @@ import { mapState } from "vuex";
 export default {
   components: { PopupProyecto },
   data() {
-    return {
-      /**proyectos: [
-        {
-          titulo: "Trabajo de BD2",
-          categoria: "Backend",
-          lider: "Emiliano Graniero",
-          plazo: "9 Jun 2021",
-          estado: "completado",
-          descripcion: "Mens Sana",
-        },
-        {
-          titulo: "Trabajo de NT2",
-          categoria: "Frontend",
-          lider: "Guido Ponzio",
-          plazo: "19 Jun 2021",
-          estado: "enProgreso",
-          descripcion: "Mens Sana",
-        },
-        {
-          titulo: "Trabajo de AMS",
-          categoria: "Analisis funcional",
-          lider: "Lucas Cantoni",
-          plazo: "1 Jun 2021",
-          estado: "vencido",
-          descripcion: "Mens Sana",
-        },
-        {
-          titulo: "Trabajo de AMS",
-          categoria: "Analisis funcional",
-          lider: "Lucas Cantoni",
-          plazo: "1 Jun 2021",
-          estado: "completado",
-          descripcion: "Mens Sana",
-        },
-      ],**/
-    };
+    return {};
   },
   methods: {
     ordenar(prop) {
@@ -280,10 +245,6 @@ export default {
  },
   computed: {
    ...mapState(['proyectos']),
-    /**proyectos() {
-      console.log(this.$store.state)
-      return this.$store.state.proyectos;
-    },**/
   },
 };
 </script>

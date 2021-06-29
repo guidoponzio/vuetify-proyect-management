@@ -26,8 +26,8 @@
           sm="6"
           md="4"
           lg="3"
-          v-for="lider in lideres"
-          :key="lider.id"
+          v-for="integrante in integrantes"
+          :key="integrante.id"
         >
           <v-card flat class="text-center ma-3">
             <!--<v-responsive class="pt-4">
@@ -37,18 +37,18 @@
             </v-responsive>-->
             <v-card-text>
                  <v-card-title>
-              <div class="text-title-1">{{ lider.nombre }}</div>
+              <div class="text-title-1">{{ integrante.nombre }}</div>
             </v-card-title>
-              <div class="grey--text">{{ lider.rol }}</div>
-              <div class="grey--text"> Email: {{ lider.email }}</div>
+              <div class="grey--text">{{ integrante.rol }}</div>
+              <div class="grey--text"> Email: {{ integrante.email }}</div>
             </v-card-text>
 
 
             <v-card-action>
               <v-btn text depressed class="mb-2 mx-2">
-                <PopupIntegrante accion="editar" :idLider="lider.id"/>
+                <PopupIntegrante accion="editar" :idIntegrante="integrante.id"/>
               </v-btn>
-              <v-btn @click="eliminar(lider.id)" text depressed class="mb-2 ml-2" color="red" dark>
+              <v-btn @click="eliminar(integrante.id)" text depressed class="mb-2 ml-2" color="red" dark>
                 <v-icon dark> mdi-delete </v-icon>
               </v-btn>
             </v-card-action>
@@ -105,8 +105,11 @@ export default {
       }
     },
   },
+  beforeMount(){
+    this.$store.dispatch("fetchIntegrantes");
+  },
   computed: {
-    ...mapState(['lideres'])
+    ...mapState(['integrantes'])
  },
 };
 </script>
